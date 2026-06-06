@@ -1,0 +1,2408 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>منصة تعليم ريادة الأعمال والابتكار | كلية التربية بقنا</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@300;400;600;700;900&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0d1117;
+  --surface: #161b22;
+  --surface2: #1c2330;
+  --surface3: #21262d;
+  --border: #30363d;
+  --accent: #f0a500;
+  --accent2: #e85d04;
+  --accent3: #4cc9f0;
+  --text: #e6edf3;
+  --text2: #8b949e;
+  --text3: #58a6ff;
+  --success: #3fb950;
+  --danger: #f85149;
+  --warning: #d29922;
+  --ch1: #f0a500;
+  --ch2: #4cc9f0;
+  --ch3: #a78bfa;
+  --ch4: #34d399;
+  --ch5: #f87171;
+  --nav-w: 280px;
+  --radius: 12px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+.light-mode {
+  --bg: #f5f5f0;
+  --surface: #ffffff;
+  --surface2: #f0ede8;
+  --surface3: #e8e4dc;
+  --border: #d4cfc5;
+  --text: #1a1a1a;
+  --text2: #5a5a5a;
+  --text3: #1a5fa8;
+  --shadow: 0 4px 24px rgba(0,0,0,0.1);
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Cairo', 'Tajawal', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  transition: background 0.3s, color 0.3s;
+  overflow-x: hidden;
+}
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--surface); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+/* ===== SIDEBAR ===== */
+#sidebar {
+  position: fixed;
+  top: 0; right: 0;
+  width: var(--nav-w);
+  height: 100vh;
+  background: var(--surface);
+  border-left: 1px solid var(--border);
+  overflow-y: auto;
+  z-index: 100;
+  transition: transform 0.3s ease;
+  padding-bottom: 2rem;
+}
+#sidebar.collapsed { transform: translateX(var(--nav-w)); }
+
+.sidebar-header {
+  padding: 1.5rem 1.25rem 1rem;
+  border-bottom: 1px solid var(--border);
+  position: sticky; top: 0;
+  background: var(--surface);
+  z-index: 10;
+}
+.sidebar-logo {
+  font-family: 'Amiri', serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--accent);
+  line-height: 1.4;
+  margin-bottom: 0.75rem;
+}
+.sidebar-logo span { display: block; font-size: 0.75rem; color: var(--text2); font-family: 'Cairo', sans-serif; font-weight: 400; margin-top: 2px; }
+
+/* Progress bar */
+.progress-bar-wrap { background: var(--surface3); border-radius: 4px; height: 6px; margin-bottom: 0.5rem; }
+.progress-bar-fill { height: 100%; border-radius: 4px; background: linear-gradient(90deg, var(--accent), var(--accent2)); transition: width 0.5s ease; }
+.progress-label { font-size: 0.7rem; color: var(--text2); }
+
+/* Nav links */
+.nav-section { padding: 0.75rem 0; }
+.nav-section-title {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text2);
+  padding: 0 1.25rem 0.4rem;
+  font-weight: 700;
+}
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.6rem 1.25rem;
+  color: var(--text2);
+  text-decoration: none;
+  font-size: 0.85rem;
+  transition: all 0.2s;
+  cursor: pointer;
+  border: none; background: none;
+  width: 100%; text-align: right;
+  border-right: 3px solid transparent;
+}
+.nav-link:hover { background: var(--surface2); color: var(--text); }
+.nav-link.active { color: var(--accent); background: rgba(240,165,0,0.08); border-right-color: var(--accent); }
+.nav-link .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.nav-link .check { margin-right: auto; font-size: 0.7rem; color: var(--success); opacity: 0; transition: opacity 0.2s; }
+.nav-link.done .check { opacity: 1; }
+
+/* ===== TOP BAR ===== */
+#topbar {
+  position: fixed;
+  top: 0; left: 0;
+  right: var(--nav-w);
+  height: 56px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0 1.5rem;
+  z-index: 99;
+  transition: right 0.3s;
+}
+#topbar.full { right: 0; }
+.topbar-search {
+  flex: 1;
+  max-width: 400px;
+  position: relative;
+}
+.topbar-search input {
+  width: 100%;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.45rem 2.5rem 0.45rem 1rem;
+  color: var(--text);
+  font-family: 'Cairo', sans-serif;
+  font-size: 0.85rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.topbar-search input:focus { border-color: var(--accent); }
+.topbar-search .search-icon {
+  position: absolute;
+  left: 0.75rem; top: 50%;
+  transform: translateY(-50%);
+  color: var(--text2);
+  font-size: 0.9rem;
+  pointer-events: none;
+}
+.topbar-search-results {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0; left: 0;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  max-height: 300px;
+  overflow-y: auto;
+  display: none;
+  z-index: 200;
+  box-shadow: var(--shadow);
+}
+.topbar-search-results.show { display: block; }
+.search-result-item {
+  padding: 0.6rem 1rem;
+  cursor: pointer;
+  font-size: 0.8rem;
+  border-bottom: 1px solid var(--border);
+  transition: background 0.15s;
+}
+.search-result-item:hover { background: var(--surface2); }
+.search-result-item strong { color: var(--accent); font-size: 0.7rem; display: block; }
+
+.topbar-btn {
+  width: 36px; height: 36px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--surface2);
+  color: var(--text2);
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem;
+  transition: all 0.2s;
+}
+.topbar-btn:hover { background: var(--surface3); color: var(--text); border-color: var(--accent); }
+
+.topbar-title {
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--text);
+  white-space: nowrap;
+}
+
+/* ===== MAIN CONTENT ===== */
+#main {
+  margin-right: var(--nav-w);
+  margin-top: 56px;
+  padding: 2rem 2.5rem;
+  min-height: calc(100vh - 56px);
+  transition: margin-right 0.3s;
+}
+#main.full { margin-right: 0; }
+
+/* ===== SECTIONS ===== */
+.section { display: none; animation: fadeIn 0.4s ease; }
+.section.active { display: block; }
+@keyframes fadeIn { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
+
+/* ===== HERO ===== */
+.hero {
+  background: linear-gradient(135deg, var(--surface) 0%, var(--surface2) 100%);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 3rem 2.5rem;
+  margin-bottom: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -40%; right: -10%;
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, rgba(240,165,0,0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero-badge {
+  display: inline-block;
+  background: rgba(240,165,0,0.15);
+  color: var(--accent);
+  border: 1px solid rgba(240,165,0,0.3);
+  border-radius: 20px;
+  padding: 0.25rem 0.85rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  letter-spacing: 0.05em;
+}
+.hero h1 {
+  font-family: 'Amiri', serif;
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 0.5rem;
+  line-height: 1.4;
+}
+.hero p { color: var(--text2); font-size: 1rem; line-height: 1.7; max-width: 600px; margin-bottom: 1.5rem; }
+.hero-stats {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+.hero-stat { text-align: center; }
+.hero-stat strong { display: block; font-size: 1.6rem; font-weight: 900; color: var(--accent); }
+.hero-stat span { font-size: 0.75rem; color: var(--text2); }
+
+/* ===== CHAPTER CARDS ===== */
+.chapters-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.25rem;
+  margin-bottom: 2rem;
+}
+.chapter-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+.chapter-card::before {
+  content: '';
+  position: absolute;
+  top: 0; right: 0;
+  width: 100%; height: 3px;
+}
+.chapter-card.ch1::before { background: var(--ch1); }
+.chapter-card.ch2::before { background: var(--ch2); }
+.chapter-card.ch3::before { background: var(--ch3); }
+.chapter-card.ch4::before { background: var(--ch4); }
+.chapter-card.ch5::before { background: var(--ch5); }
+.chapter-card:hover { border-color: var(--accent); transform: translateY(-3px); box-shadow: var(--shadow); }
+.chapter-card .ch-num {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.5rem;
+}
+.chapter-card.ch1 .ch-num { color: var(--ch1); }
+.chapter-card.ch2 .ch-num { color: var(--ch2); }
+.chapter-card.ch3 .ch-num { color: var(--ch3); }
+.chapter-card.ch4 .ch-num { color: var(--ch4); }
+.chapter-card.ch5 .ch-num { color: var(--ch5); }
+.chapter-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem; line-height: 1.4; }
+.chapter-card p { font-size: 0.8rem; color: var(--text2); line-height: 1.6; }
+.chapter-card .ch-meta { display: flex; gap: 1rem; margin-top: 1rem; font-size: 0.72rem; color: var(--text2); }
+.chapter-card .ch-progress { margin-top: 0.75rem; }
+.ch-prog-bar { height: 4px; background: var(--surface3); border-radius: 2px; }
+.ch-prog-fill { height: 100%; border-radius: 2px; background: var(--accent); transition: width 0.5s; }
+
+/* ===== CONTENT SECTIONS ===== */
+.content-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border);
+}
+.content-header-badge {
+  flex-shrink: 0;
+  width: 52px; height: 52px;
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.4rem;
+  font-weight: 900;
+}
+.content-header h2 {
+  font-family: 'Amiri', serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  line-height: 1.4;
+  margin-bottom: 0.35rem;
+}
+.content-header p { color: var(--text2); font-size: 0.85rem; line-height: 1.6; }
+
+/* Cards */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  margin-bottom: 1.25rem;
+}
+.card h4 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.card p, .card li { font-size: 0.875rem; color: var(--text2); line-height: 1.75; }
+.card ul { padding-right: 1.25rem; }
+.card ul li { margin-bottom: 0.35rem; }
+
+/* Objectives box */
+.objectives-box {
+  background: rgba(240,165,0,0.06);
+  border: 1px solid rgba(240,165,0,0.2);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1.25rem;
+}
+.objectives-box h4 { color: var(--accent); font-size: 0.85rem; margin-bottom: 0.75rem; }
+.objectives-box li { font-size: 0.85rem; color: var(--text); margin-bottom: 0.4rem; padding-right: 0.5rem; list-style: none; }
+.objectives-box li::before { content: '◈ '; color: var(--accent); }
+
+/* Opening questions */
+.questions-box {
+  background: rgba(76,201,240,0.06);
+  border: 1px solid rgba(76,201,240,0.2);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.5rem;
+  margin-bottom: 1.25rem;
+}
+.questions-box h4 { color: var(--accent3); font-size: 0.85rem; margin-bottom: 0.75rem; }
+.questions-box li { font-size: 0.85rem; color: var(--text); margin-bottom: 0.4rem; padding-right: 0.5rem; list-style: none; }
+.questions-box li::before { content: '❓ '; }
+
+/* Definition box */
+.def-box {
+  background: rgba(167,139,250,0.06);
+  border-right: 4px solid var(--ch3);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1rem;
+}
+.def-box strong { color: var(--ch3); font-size: 0.75rem; display: block; margin-bottom: 0.35rem; }
+.def-box p { font-size: 0.875rem; color: var(--text); line-height: 1.7; }
+
+/* Key concept tags */
+.concept-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 1rem 0; }
+.concept-tag {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 0.25rem 0.85rem;
+  font-size: 0.75rem;
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.concept-tag:hover { background: rgba(240,165,0,0.1); color: var(--accent); border-color: var(--accent); }
+
+/* Info grid */
+.info-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; margin-bottom: 1.25rem; }
+.info-item {
+  background: var(--surface2);
+  border-radius: 10px;
+  padding: 1rem;
+  border: 1px solid var(--border);
+}
+.info-item .icon { font-size: 1.5rem; margin-bottom: 0.5rem; }
+.info-item h5 { font-size: 0.85rem; font-weight: 700; color: var(--accent); margin-bottom: 0.25rem; }
+.info-item p { font-size: 0.78rem; color: var(--text2); line-height: 1.5; }
+
+/* Summary box */
+.summary-box {
+  background: linear-gradient(135deg, var(--surface) 0%, var(--surface2) 100%);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  margin: 1.5rem 0;
+}
+.summary-box h4 { font-size: 0.9rem; font-weight: 700; margin-bottom: 1rem; color: var(--accent); }
+.summary-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--border);
+}
+.summary-item:last-child { border-bottom: none; }
+.summary-item .num {
+  width: 24px; height: 24px;
+  background: var(--accent);
+  color: var(--bg);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.7rem;
+  font-weight: 900;
+  flex-shrink: 0;
+}
+.summary-item p { font-size: 0.84rem; color: var(--text); line-height: 1.6; }
+
+/* Exam note */
+.exam-note {
+  background: rgba(232,93,4,0.08);
+  border: 1px solid rgba(232,93,4,0.25);
+  border-radius: 8px;
+  padding: 0.85rem 1rem;
+  margin: 0.75rem 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  font-size: 0.82rem;
+}
+.exam-note .label { color: var(--accent2); font-weight: 800; white-space: nowrap; }
+
+/* Section heading */
+.section-heading {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text);
+  margin: 1.75rem 0 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--border);
+}
+.section-heading::before { content: '▌'; color: var(--accent); }
+
+/* Principle pairs */
+.principle-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin: 1rem 0; }
+.principle-pair {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--surface2);
+  border-radius: 8px;
+  padding: 0.6rem 0.85rem;
+  font-size: 0.8rem;
+}
+.principle-pair .arrow { color: var(--accent); }
+.principle-pair .from { font-weight: 700; color: var(--text); }
+.principle-pair .to { color: var(--text2); }
+
+/* Table */
+.content-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+  font-size: 0.82rem;
+}
+.content-table th {
+  background: var(--surface2);
+  padding: 0.6rem 1rem;
+  text-align: right;
+  font-weight: 700;
+  color: var(--accent);
+  border: 1px solid var(--border);
+}
+.content-table td {
+  padding: 0.6rem 1rem;
+  border: 1px solid var(--border);
+  color: var(--text2);
+  line-height: 1.5;
+  vertical-align: top;
+}
+.content-table tr:nth-child(even) td { background: var(--surface2); }
+
+/* ===== FLASHCARDS ===== */
+.flashcards-container { max-width: 640px; margin: 0 auto; }
+.flashcard-nav { display: flex; gap: 0.75rem; margin-bottom: 1rem; flex-wrap: wrap; }
+.flashcard-nav select {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.4rem 0.85rem;
+  color: var(--text);
+  font-family: 'Cairo', sans-serif;
+  font-size: 0.82rem;
+  outline: none;
+  cursor: pointer;
+}
+.flashcard-counter { font-size: 0.8rem; color: var(--text2); margin-right: auto; display: flex; align-items: center; }
+
+.flashcard-scene {
+  perspective: 1000px;
+  height: 280px;
+  cursor: pointer;
+  margin-bottom: 1.25rem;
+}
+.flashcard {
+  width: 100%; height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.5s cubic-bezier(0.4,0,0.2,1);
+}
+.flashcard.flipped { transform: rotateY(180deg); }
+.flashcard-front, .flashcard-back {
+  position: absolute;
+  width: 100%; height: 100%;
+  backface-visibility: hidden;
+  border-radius: var(--radius);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  text-align: center;
+  border: 1px solid var(--border);
+}
+.flashcard-front {
+  background: linear-gradient(135deg, var(--surface) 0%, var(--surface2) 100%);
+}
+.flashcard-back {
+  background: linear-gradient(135deg, rgba(240,165,0,0.1) 0%, var(--surface) 100%);
+  transform: rotateY(180deg);
+  border-color: rgba(240,165,0,0.3);
+}
+.flashcard-front .hint { font-size: 0.7rem; color: var(--text2); margin-bottom: 1rem; }
+.flashcard-front .question { font-size: 1.1rem; font-weight: 700; color: var(--text); line-height: 1.5; }
+.flashcard-back .label { font-size: 0.7rem; color: var(--accent); font-weight: 700; margin-bottom: 0.75rem; }
+.flashcard-back .answer { font-size: 0.9rem; color: var(--text); line-height: 1.6; }
+
+.flashcard-controls { display: flex; gap: 0.75rem; justify-content: center; }
+.fc-btn {
+  padding: 0.6rem 1.5rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--surface2);
+  color: var(--text);
+  cursor: pointer;
+  font-family: 'Cairo', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: all 0.2s;
+}
+.fc-btn:hover { background: var(--surface3); border-color: var(--accent); }
+.fc-btn.primary { background: var(--accent); color: var(--bg); border-color: var(--accent); }
+.fc-btn.primary:hover { opacity: 0.9; }
+
+/* ===== QUIZZES ===== */
+.quiz-header { display: flex; gap: 1rem; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; }
+.quiz-select {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.5rem 0.85rem;
+  color: var(--text);
+  font-family: 'Cairo', sans-serif;
+  font-size: 0.85rem;
+  outline: none;
+  cursor: pointer;
+}
+.quiz-counter { font-size: 0.82rem; color: var(--text2); margin-right: auto; }
+.quiz-progress-bar { width: 100%; height: 4px; background: var(--surface3); border-radius: 2px; margin-bottom: 1.5rem; }
+.quiz-progress-fill { height: 100%; border-radius: 2px; background: linear-gradient(90deg, var(--accent), var(--accent2)); transition: width 0.4s; }
+
+.quiz-question {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+}
+.quiz-q-num { font-size: 0.7rem; color: var(--text2); margin-bottom: 0.5rem; font-weight: 700; }
+.quiz-q-text { font-size: 0.95rem; font-weight: 700; color: var(--text); line-height: 1.6; margin-bottom: 1.25rem; }
+
+.quiz-options { display: flex; flex-direction: column; gap: 0.6rem; }
+.quiz-option {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.7rem 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 0.85rem;
+  color: var(--text2);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.quiz-option:hover:not(.disabled) { border-color: var(--accent); color: var(--text); background: rgba(240,165,0,0.06); }
+.quiz-option.correct { background: rgba(63,185,80,0.1); border-color: var(--success); color: var(--success); }
+.quiz-option.wrong { background: rgba(248,81,73,0.1); border-color: var(--danger); color: var(--danger); }
+.quiz-option.disabled { cursor: not-allowed; }
+.quiz-option .opt-letter {
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  flex-shrink: 0;
+  color: var(--text2);
+}
+.quiz-option.correct .opt-letter { background: var(--success); color: white; border-color: var(--success); }
+.quiz-option.wrong .opt-letter { background: var(--danger); color: white; border-color: var(--danger); }
+
+.quiz-explanation {
+  background: rgba(76,201,240,0.06);
+  border: 1px solid rgba(76,201,240,0.2);
+  border-radius: 8px;
+  padding: 0.85rem 1rem;
+  margin-top: 0.85rem;
+  font-size: 0.82rem;
+  color: var(--text);
+  display: none;
+  line-height: 1.6;
+}
+.quiz-explanation.show { display: block; animation: fadeIn 0.3s ease; }
+.quiz-explanation strong { color: var(--accent3); }
+
+.quiz-result {
+  text-align: center;
+  padding: 2.5rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  display: none;
+}
+.quiz-result.show { display: block; animation: fadeIn 0.4s ease; }
+.quiz-result .score { font-size: 3rem; font-weight: 900; margin-bottom: 0.5rem; }
+.quiz-result .score.excellent { color: var(--success); }
+.quiz-result .score.good { color: var(--warning); }
+.quiz-result .score.needs-work { color: var(--danger); }
+.quiz-result p { color: var(--text2); margin-bottom: 1.5rem; }
+
+.quiz-nav { display: flex; gap: 0.75rem; margin-top: 1rem; }
+
+/* ===== GLOSSARY ===== */
+.glossary-search {
+  width: 100%;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.7rem 1rem;
+  color: var(--text);
+  font-family: 'Cairo', sans-serif;
+  font-size: 0.9rem;
+  outline: none;
+  margin-bottom: 1.5rem;
+  transition: border-color 0.2s;
+}
+.glossary-search:focus { border-color: var(--accent); }
+.glossary-item {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 0.75rem;
+  transition: all 0.2s;
+}
+.glossary-item:hover { border-color: var(--border); transform: translateX(-2px); }
+.glossary-item h4 { font-size: 0.95rem; font-weight: 700; color: var(--accent); margin-bottom: 0.35rem; }
+.glossary-item p { font-size: 0.82rem; color: var(--text2); line-height: 1.6; }
+.glossary-item .tag { font-size: 0.65rem; background: var(--surface2); border: 1px solid var(--border); border-radius: 4px; padding: 0.1rem 0.4rem; color: var(--text2); margin-bottom: 0.35rem; display: inline-block; }
+
+/* ===== TABS ===== */
+.tabs { display: flex; gap: 0.25rem; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border); }
+.tab-btn {
+  padding: 0.6rem 1.1rem;
+  border: none;
+  background: none;
+  color: var(--text2);
+  font-family: 'Cairo', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: all 0.2s;
+}
+.tab-btn:hover { color: var(--text); }
+.tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+.tab-content { display: none; }
+.tab-content.active { display: block; animation: fadeIn 0.3s ease; }
+
+/* ===== BREADCRUMB ===== */
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  color: var(--text2);
+  margin-bottom: 1.5rem;
+}
+.breadcrumb a { color: var(--text2); cursor: pointer; text-decoration: none; }
+.breadcrumb a:hover { color: var(--accent); }
+.breadcrumb .sep { color: var(--border); }
+
+/* ===== TIMELINE ===== */
+.timeline { position: relative; padding-right: 1.5rem; margin: 1rem 0; }
+.timeline::before {
+  content: '';
+  position: absolute;
+  right: 0; top: 0; bottom: 0;
+  width: 2px;
+  background: var(--border);
+}
+.timeline-item { position: relative; margin-bottom: 1.5rem; }
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  right: -1.6rem;
+  top: 0.35rem;
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 2px solid var(--bg);
+}
+.timeline-item h5 { font-size: 0.85rem; font-weight: 700; color: var(--accent); margin-bottom: 0.25rem; }
+.timeline-item p { font-size: 0.8rem; color: var(--text2); line-height: 1.6; }
+
+/* ===== ACCORDION ===== */
+.accordion { margin-bottom: 0.6rem; }
+.accordion-header {
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.85rem 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  font-family: 'Cairo', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text);
+  transition: all 0.2s;
+}
+.accordion-header:hover { border-color: var(--accent); background: var(--surface2); }
+.accordion-header.open { border-bottom-left-radius: 0; border-bottom-right-radius: 0; border-color: var(--accent); color: var(--accent); }
+.accordion-icon { font-size: 0.7rem; transition: transform 0.3s; }
+.accordion-header.open .accordion-icon { transform: rotate(180deg); }
+.accordion-body {
+  background: var(--surface2);
+  border: 1px solid var(--accent);
+  border-top: none;
+  border-radius: 0 0 8px 8px;
+  padding: 1rem 1.25rem;
+  font-size: 0.85rem;
+  color: var(--text2);
+  line-height: 1.7;
+  display: none;
+}
+.accordion-body.open { display: block; animation: fadeIn 0.25s ease; }
+
+/* ===== BOOKMARK ===== */
+.bookmark-btn {
+  border: 1px solid var(--border);
+  background: var(--surface2);
+  color: var(--text2);
+  border-radius: 6px;
+  padding: 0.25rem 0.6rem;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.bookmark-btn.bookmarked { background: rgba(240,165,0,0.1); color: var(--accent); border-color: var(--accent); }
+
+/* ===== SKILLS CATEGORIES ===== */
+.skills-cats { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1rem; margin: 1rem 0; }
+.skill-cat {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+}
+.skill-cat h5 { font-size: 0.85rem; font-weight: 700; color: var(--accent); margin-bottom: 0.5rem; }
+.skill-cat ul { list-style: none; }
+.skill-cat li { font-size: 0.8rem; color: var(--text2); padding: 0.2rem 0; }
+.skill-cat li::before { content: '• '; color: var(--accent); }
+
+/* ===== MINDSET TRAITS ===== */
+.traits-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 0.85rem; margin: 1rem 0; }
+.trait-item {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1rem;
+}
+.trait-item h5 { font-size: 0.85rem; font-weight: 700; color: var(--accent); margin-bottom: 0.35rem; }
+.trait-item p { font-size: 0.78rem; color: var(--text2); line-height: 1.5; }
+.trait-item .ex { font-size: 0.72rem; color: var(--text3); margin-top: 0.3rem; font-style: italic; }
+
+/* ===== MARKETING MIX ===== */
+.p4-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin: 1rem 0; }
+.p4-item {
+  background: var(--surface2);
+  border-radius: 12px;
+  padding: 1.25rem;
+  border: 1px solid var(--border);
+  text-align: center;
+}
+.p4-item .p-icon { font-size: 2rem; margin-bottom: 0.5rem; }
+.p4-item h5 { font-size: 0.95rem; font-weight: 700; color: var(--accent); margin-bottom: 0.35rem; }
+.p4-item p { font-size: 0.78rem; color: var(--text2); line-height: 1.5; }
+
+/* ===== BUSINESS START OPTIONS ===== */
+.start-options { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1rem; margin: 1rem 0; }
+.start-option {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1.25rem;
+}
+.start-option h5 { font-size: 0.9rem; font-weight: 700; color: var(--accent); margin-bottom: 0.75rem; }
+.pros-cons { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; font-size: 0.75rem; }
+.pros h6 { color: var(--success); margin-bottom: 0.3rem; font-size: 0.72rem; }
+.cons h6 { color: var(--danger); margin-bottom: 0.3rem; font-size: 0.72rem; }
+.pros li, .cons li { color: var(--text2); margin-bottom: 0.2rem; list-style: none; padding-right: 0.25rem; }
+.pros li::before { content: '✓ '; color: var(--success); }
+.cons li::before { content: '✗ '; color: var(--danger); }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 900px) {
+  :root { --nav-w: 260px; }
+  #main { padding: 1.25rem 1rem; }
+  .hero h1 { font-size: 1.6rem; }
+  .hero-stats { gap: 1rem; }
+  .principle-grid { grid-template-columns: 1fr; }
+  .p4-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 650px) {
+  #sidebar { width: 100%; transform: translateX(100%); }
+  #sidebar.open { transform: translateX(0); }
+  #main { margin-right: 0; }
+  #topbar { right: 0; }
+  .chapters-grid { grid-template-columns: 1fr; }
+  .info-grid { grid-template-columns: 1fr; }
+  .traits-grid { grid-template-columns: 1fr; }
+  .skills-cats { grid-template-columns: 1fr; }
+  .start-options { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ===== SIDEBAR ===== -->
+<nav id="sidebar">
+  <div class="sidebar-header">
+    <div class="sidebar-logo">
+      ريادة الأعمال والابتكار
+      <span>كلية التربية بقنا — الفرقة الأولى</span>
+    </div>
+    <div class="progress-bar-wrap">
+      <div class="progress-bar-fill" id="globalProgress" style="width:0%"></div>
+    </div>
+    <div class="progress-label" id="progressLabel">٠ من ٥ فصول مكتملة</div>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-section-title">الرئيسية</div>
+    <button class="nav-link active" onclick="showSection('home')">
+      <span class="dot" style="background:#f0a500"></span> لوحة التحكم
+      <span class="check">✔</span>
+    </button>
+    <button class="nav-link" onclick="showSection('glossary')">
+      <span class="dot" style="background:#4cc9f0"></span> المعجم المصطلحي
+      <span class="check">✔</span>
+    </button>
+    <button class="nav-link" onclick="showSection('flashcards')">
+      <span class="dot" style="background:#a78bfa"></span> البطاقات التعليمية
+      <span class="check">✔</span>
+    </button>
+    <button class="nav-link" onclick="showSection('quizzes')">
+      <span class="dot" style="background:#34d399"></span> الاختبارات
+      <span class="check">✔</span>
+    </button>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-section-title">الفصول الدراسية</div>
+    <button class="nav-link" onclick="showSection('ch1')">
+      <span class="dot" style="background:var(--ch1)"></span> الفصل الأول: أساسيات ريادة الأعمال
+      <span class="check">✔</span>
+    </button>
+    <button class="nav-link" onclick="showSection('ch2')">
+      <span class="dot" style="background:var(--ch2)"></span> الفصل الثاني: تدريب العقول الريادية
+      <span class="check">✔</span>
+    </button>
+    <button class="nav-link" onclick="showSection('ch3')">
+      <span class="dot" style="background:var(--ch3)"></span> الفصل الثالث: خصائص رائد الأعمال
+      <span class="check">✔</span>
+    </button>
+    <button class="nav-link" onclick="showSection('ch4')">
+      <span class="dot" style="background:var(--ch4)"></span> الفصل الرابع: المشروعات الريادية
+      <span class="check">✔</span>
+    </button>
+    <button class="nav-link" onclick="showSection('ch5')">
+      <span class="dot" style="background:var(--ch5)"></span> الفصل الخامس: إدارة الأعمال ومستقبل العمل
+      <span class="check">✔</span>
+    </button>
+  </div>
+</nav>
+
+<!-- ===== TOPBAR ===== -->
+<header id="topbar">
+  <button class="topbar-btn" id="sidebarToggle" onclick="toggleSidebar()" title="القائمة الجانبية">☰</button>
+  <div class="topbar-search">
+    <span class="search-icon">🔍</span>
+    <input type="text" id="searchInput" placeholder="ابحث في المحتوى..." oninput="doSearch(this.value)">
+    <div class="topbar-search-results" id="searchResults"></div>
+  </div>
+  <span class="topbar-title" id="topbarTitle">لوحة التحكم</span>
+  <button class="topbar-btn" onclick="toggleDark()" title="تغيير المظهر" id="themeBtn">🌙</button>
+</header>
+
+<!-- ===== MAIN ===== -->
+<main id="main">
+
+<!-- ===== HOME ===== -->
+<div class="section active" id="section-home">
+  <div class="hero">
+    <div class="hero-badge">📘 مقرر جامعي — الفرقة الأولى</div>
+    <h1>تعليم ريادة الأعمال والابتكار</h1>
+    <p>منصة تعليمية متكاملة لمقرر ريادة الأعمال والابتكار — كلية التربية بقنا. تشمل خمسة فصول دراسية مع اختبارات، بطاقات تعليمية، ومعجم مصطلحي تفاعلي.</p>
+    <div class="hero-stats">
+      <div class="hero-stat"><strong>٥</strong><span>فصول دراسية</span></div>
+      <div class="hero-stat"><strong>٧٥+</strong><span>مفهوم أساسي</span></div>
+      <div class="hero-stat"><strong>١٠٠+</strong><span>سؤال اختباري</span></div>
+      <div class="hero-stat"><strong>٤٠+</strong><span>بطاقة تعليمية</span></div>
+    </div>
+  </div>
+
+  <h3 style="font-size:1rem;font-weight:700;margin-bottom:1rem;color:var(--text2)">الفصول الدراسية</h3>
+  <div class="chapters-grid">
+    <div class="chapter-card ch1" onclick="showSection('ch1')">
+      <div class="ch-num">الفصل الأول</div>
+      <h3>أساسيات ريادة الأعمال</h3>
+      <p>مفهوم ريادة الأعمال، دور رواد ورائدات الأعمال، عوامل ظهورها، ومنظومة ريادة الأعمال ودور المؤسسات التعليمية.</p>
+      <div class="ch-meta"><span>📖 ٢٠ صفحة</span><span>🎯 ٥ أهداف</span><span>❓ ٢٠ سؤال</span></div>
+      <div class="ch-progress"><div class="ch-prog-bar"><div class="ch-prog-fill" style="width:0%" id="p1"></div></div></div>
+    </div>
+    <div class="chapter-card ch2" onclick="showSection('ch2')">
+      <div class="ch-num">الفصل الثاني</div>
+      <h3>تدريب وتطوير العقول الريادية</h3>
+      <p>العقلية الريادية، أبعادها وخصائصها، استراتيجيات تطويرها، والمفاهيم الخاطئة الشائعة حولها.</p>
+      <div class="ch-meta"><span>📖 ٢٦ صفحة</span><span>🎯 ٤ أهداف</span><span>❓ ٢٠ سؤال</span></div>
+      <div class="ch-progress"><div class="ch-prog-bar"><div class="ch-prog-fill" style="width:0%" id="p2"></div></div></div>
+    </div>
+    <div class="chapter-card ch3" onclick="showSection('ch3')">
+      <div class="ch-num">الفصل الثالث</div>
+      <h3>خصائص رائد الأعمال ومهاراته</h3>
+      <p>سمات رائد الأعمال الناجح، ثقافة ريادة الأعمال، التعليم الريادي، ومهاراته المتعددة.</p>
+      <div class="ch-meta"><span>📖 ١٨ صفحة</span><span>🎯 ٤ أهداف</span><span>❓ ٢٠ سؤال</span></div>
+      <div class="ch-progress"><div class="ch-prog-bar"><div class="ch-prog-fill" style="width:0%" id="p3"></div></div></div>
+    </div>
+    <div class="chapter-card ch4" onclick="showSection('ch4')">
+      <div class="ch-num">الفصل الرابع</div>
+      <h3>المشروعات الريادية</h3>
+      <p>تعريف المشروع الريادي، خطوات تأسيسه، مصادر تمويله، وخيارات البدء المتاحة لرائد الأعمال.</p>
+      <div class="ch-meta"><span>📖 ٢٢ صفحة</span><span>🎯 ٤ أهداف</span><span>❓ ٢٠ سؤال</span></div>
+      <div class="ch-progress"><div class="ch-prog-bar"><div class="ch-prog-fill" style="width:0%" id="p4"></div></div></div>
+    </div>
+    <div class="chapter-card ch5" onclick="showSection('ch5')">
+      <div class="ch-num">الفصل الخامس</div>
+      <h3>إدارة الأعمال وفرص العمل المستقبلية</h3>
+      <p>ممارسات ريادة الأعمال، التسويق والمزيج التسويقي، الموارد المالية، وإدارة الأعمال.</p>
+      <div class="ch-meta"><span>📖 ٢٩ صفحة</span><span>🎯 ٣ أهداف</span><span>❓ ٢٠ سؤال</span></div>
+      <div class="ch-progress"><div class="ch-prog-bar"><div class="ch-prog-fill" style="width:0%" id="p5"></div></div></div>
+    </div>
+  </div>
+
+  <!-- Quick tools -->
+  <div class="info-grid" style="margin-top:1.5rem">
+    <div class="info-item" style="cursor:pointer" onclick="showSection('flashcards')">
+      <div class="icon">🃏</div>
+      <h5>البطاقات التعليمية</h5>
+      <p>راجع المفاهيم بطريقة تفاعلية ومشوقة من خلال بطاقات التعلم السريع.</p>
+    </div>
+    <div class="info-item" style="cursor:pointer" onclick="showSection('quizzes')">
+      <div class="icon">📝</div>
+      <h5>اختبار نفسك</h5>
+      <p>أكثر من ١٠٠ سؤال اختياري متعدد مع تصحيح فوري وشرح الإجابات.</p>
+    </div>
+    <div class="info-item" style="cursor:pointer" onclick="showSection('glossary')">
+      <div class="icon">📚</div>
+      <h5>المعجم المصطلحي</h5>
+      <p>جميع المصطلحات العلمية والتعريفات منظمة وقابلة للبحث.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== CHAPTER 1 ===== -->
+<div class="section" id="section-ch1">
+  <div class="breadcrumb">
+    <a onclick="showSection('home')">الرئيسية</a>
+    <span class="sep">›</span>
+    <span>الفصل الأول</span>
+  </div>
+  <div class="content-header">
+    <div class="content-header-badge" style="background:rgba(240,165,0,0.15);color:var(--ch1)">١</div>
+    <div>
+      <h2>أساسيات ريادة الأعمال</h2>
+      <p>Entrepreneurship — المفهوم، الدور، المنظومة، والمؤسسات التعليمية</p>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab(this,'t1a')">المحتوى</button>
+    <button class="tab-btn" onclick="switchTab(this,'t1b')">أسئلة الفصل</button>
+    <button class="tab-btn" onclick="switchTab(this,'t1c')">ملاحظات الامتحان</button>
+  </div>
+
+  <!-- TAB: CONTENT -->
+  <div class="tab-content active" id="t1a">
+    <div class="objectives-box">
+      <h4>🎯 أهداف الفصل</h4>
+      <ul>
+        <li>التعريف بمفهوم وخصائص ريادة الأعمال ورواد الأعمال.</li>
+        <li>توضيح مبررات ظهور ونمو التوجه إلى ريادة الأعمال.</li>
+        <li>التعريف بدور رواد ورائدات الأعمال.</li>
+        <li>توضيح الأخطاء الشائعة في التوجه إلى ريادة الأعمال.</li>
+        <li>التعريف بمفهوم ومكونات منظومة الأعمال وخصائصها ومنهج بناء بيئة محفزة لها.</li>
+      </ul>
+    </div>
+
+    <div class="questions-box">
+      <h4>💬 تساؤلات افتتاحية</h4>
+      <ul>
+        <li>ما هو تصورك عن معنى مصطلح ريادة الأعمال؟</li>
+        <li>ما هي دوافع ظهور ونمو التوجه إلى ريادة الأعمال؟</li>
+        <li>ماذا يفعل الفرد ليصبح رائد أعمال ناجح؟</li>
+        <li>هل توجد أخطاء يقع فيها رواد الأعمال؟ وكيف يتجنبها؟</li>
+        <li>كيف نبني بيئة محفزة لريادة الأعمال؟</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h4>🌍 المقدمة — السياق العالمي</h4>
+      <p>يشهد العالم في العصر الراهن تحولات شاملة ومتسارعة على كافة المستويات بفعل تأثيرات النظام العالمي الجديد (العولمة). أفرزت هذه التحولات توجهات اقتصادية جوهرية، أبرزها:</p>
+      <ul style="margin-top:0.75rem">
+        <li>التوجه نحو اقتصاديات السوق وسياسات التحرر الاقتصادي.</li>
+        <li>التحول نحو اقتصاد المعرفة وتعزيز القدرة التنافسية.</li>
+        <li>التوجه نحو ريادة الأعمال والمبادرة في إنشاء المشروعات.</li>
+        <li>اهتمام متزايد بمشروعات ريادة الأعمال التي تمثل ٩٠٪ من المشروعات الاقتصادية عالمياً (محسن، ٢٠٢٣).</li>
+      </ul>
+    </div>
+
+    <div class="section-heading">أولاً: مفهوم ريادة الأعمال Entrepreneurship</div>
+
+    <div class="card">
+      <h4>📖 الريادة في اللغة العربية</h4>
+      <p>تعني القيادة والرئاسة، مشتقة من الفعل "راد، ارتاده ارتياداً"؛ أي بحث عنه وطلبه. والرائد هو من يسبق غيره ويمهد السبل المستقبلية (ابن منظور، ٢٠٠٩).</p>
+    </div>
+
+    <div class="def-box">
+      <strong>قاموس كمبريدج (Cambridge Dictionary)</strong>
+      <p>ريادة الأعمال هي "مجموعة من المهارات التي تُسهم في بدء عمل جديد، من خلال ربطه بقدرات المتعلمين لتحقيق فرص جديدة، خاصة عندما يتضمن ذلك رؤية جديدة."</p>
+    </div>
+    <div class="def-box">
+      <strong>مرجع أوكسفورد (Oxford Reference)</strong>
+      <p>"النشاط الذي يعمل على إيجاد خدمات وبضائع جديدة تؤثر في السوق وتنتج أموالاً وأرباحاً، وأما رائد الأعمال فهو الشخصية القيادية التي تؤدي إلى النمو الاقتصادي."</p>
+    </div>
+    <div class="def-box">
+      <strong>بكري (٢٠١٨)</strong>
+      <p>النشاط الديناميكي الذي يسعى إلى إنشاء وتوسيع النشاط الاقتصادي، من خلال تحديد واستثمار المنتجات والأساليب والأسواق الجديدة.</p>
+    </div>
+    <div class="def-box">
+      <strong>مارتينيز Martinez (2015)</strong>
+      <p>القدرة على تنظيم وتطوير الأعمال وإدارتها في ظل وجود مخاطر وتحقيق الربح. والبحث عن فرصة تتجاوز الموارد التي تتحكم فيها حالياً.</p>
+    </div>
+    <div class="def-box">
+      <strong>ليندر Lindner (2018)</strong>
+      <p>الرغبة في إنشاء مشروع جديد من خلال أفكار إبداعية يكون هدفها استثمار الموارد الاقتصادية بكفاءة، مع القدرة على توفير طرق النمو والسيطرة وتحمل المخاطر.</p>
+    </div>
+
+    <div class="exam-note"><span class="label">📌 هام للامتحان:</span> الفرق بين ريادة الأعمال (الفرد المتميز بروح المبادرة) وثقافة ريادة الأعمال (حين تنتشر هذه الصفات في مجتمع أو مجموعة من الأفراد).</div>
+
+    <div class="section-heading">المبادئ الأساسية لريادة الأعمال</div>
+    <div class="principle-grid">
+      <div class="principle-pair"><span class="from">المبادرة</span><span class="arrow">←→</span><span class="to">الجرأة</span></div>
+      <div class="principle-pair"><span class="from">المبادأة</span><span class="arrow">←→</span><span class="to">الأسبقية</span></div>
+      <div class="principle-pair"><span class="from">الإبداع</span><span class="arrow">←→</span><span class="to">الجديد</span></div>
+      <div class="principle-pair"><span class="from">الابتكار</span><span class="arrow">←→</span><span class="to">التطوير</span></div>
+      <div class="principle-pair"><span class="from">المخاطرة</span><span class="arrow">←→</span><span class="to">المجازفة</span></div>
+      <div class="principle-pair"><span class="from">القيادة</span><span class="arrow">←→</span><span class="to">التأثير</span></div>
+      <div class="principle-pair"><span class="from">العمل الحر</span><span class="arrow">←→</span><span class="to">الاستقلالية</span></div>
+    </div>
+
+    <div class="section-heading">ثانياً: توجهات رواد الأعمال ودورهم</div>
+    <div class="info-grid">
+      <div class="info-item"><div class="icon">💡</div><h5>تحويل الأفكار</h5><p>الرغبة والقدرة على تحويل الأفكار الريادية إلى مشاريع منتجة منافسة.</p></div>
+      <div class="info-item"><div class="icon">👥</div><h5>بناء فرق العمل</h5><p>امتلاك مهارة تأسيس فرق عمل قوية لتحويل الأفكار إلى واقع عملي.</p></div>
+      <div class="info-item"><div class="icon">🎯</div><h5>أهداف فوق الذكية</h5><p>التحرك تجاه الأهداف SMARTEC وليس فقط SMART، ويسعون خلف الفرص دون الالتفات للموارد المتاحة.</p></div>
+      <div class="info-item"><div class="icon">📊</div><h5>دراسة الجدوى</h5><p>يحملون أفكاراً طموحة ودراسة جدوى دقيقة سليمة وقدر محدود من الموارد.</p></div>
+    </div>
+
+    <div class="section-heading">دور رواد ورائدات الأعمال</div>
+    <div class="card">
+      <ul>
+        <li>إيجاد موارد جديدة وتوليد فرص للاستثمار أو إنشاء مشاريع جديدة.</li>
+        <li>إيجاد أسواق جديدة وعملاء جدد وإيجاد طلب فعال على المنتجات.</li>
+        <li>تقديم وتطوير تكنولوجيا الأعمال وتوليد أساليب إدارية غير تقليدية.</li>
+        <li>تنشيط دورة الإنتاج وإيجاد فرص عمل جديدة وتحسين مستوى الدخل.</li>
+        <li>رفع كفاءة استخدام الموارد المتاحة واكتشاف مصادر غير تقليدية لتقديم منتجات جديدة.</li>
+      </ul>
+    </div>
+
+    <div class="section-heading">ثالثاً: عوامل ظهور رواد الأعمال والتطور في ريادة الأعمال</div>
+    <div class="card">
+      <h4>العلاقة بين التنمية وظهور رواد الأعمال</h4>
+      <p>تتجلى العلاقة بين ريادة الأعمال والتنمية فيما يلي:</p>
+      <ul style="margin-top:0.6rem">
+        <li>توفر فرص التميز لرائد الأعمال ليكون مختلفاً ومتميزاً عن الآخرين.</li>
+        <li>تحقق لرائد الأعمال طموحاته وتقدير ذاته من خلال تأسيس مشروع في بيئة تحدٍّ.</li>
+        <li>تحقق الاستقلالية والتمكين لتحقيق الأهداف المالية والاجتماعية والشخصية والأسرية.</li>
+        <li>تجعل رائد الأعمال نافعاً ومفيداً للمجتمع من خلال إيجاد فرص عمل حقيقية.</li>
+      </ul>
+    </div>
+
+    <div class="section-heading">رابعاً: تشكيل منظومة ريادة الأعمال</div>
+    <div class="card">
+      <h4>المنظومة لا الجهد الفردي</h4>
+      <p>يتفق المهتمون بريادة الأعمال على أنها ليست قائمة على جهد فردي بطولي، وإنما هي منظومة تستند على بيئة ريادية متكاملة وعمل جماعي منظم مترابط. التركيز على الفرد دون المنظومة ككل في ريادة الأعمال — مدخل خاطئ.</p>
+    </div>
+    <div class="info-grid">
+      <div class="info-item"><div class="icon">🔗</div><h5>تستوعب الجهود الفردية</h5><p>مسؤولية فردية وجماعية مؤسسية لتوليد الأفكار الريادية، مع تعاون وتنسيق بين كافة الأطراف.</p></div>
+      <div class="info-item"><div class="icon">⚡</div><h5>ترفع كفاءة القرارات</h5><p>المنشآت الصغيرة تتخذ قرارات أعلى سرعة وأكثر عمقاً وتأثيراً من المنشآت الكبيرة.</p></div>
+      <div class="info-item"><div class="icon">🏆</div><h5>تربط الإدارة بالريادة والقيادة</h5><p>الإدارة والقيادة والريادة هي أضلاع ثلاثة متلازمة لتحقيق كفاءة وفعالية الأداء.</p></div>
+      <div class="info-item"><div class="icon">📈</div><h5>مؤشر الكفاءة</h5><p>زيادة الوظائف الجديدة وتحسين مستواها هو المؤشر الحقيقي، ليس مجرد عدد الشركات الناشئة.</p></div>
+    </div>
+
+    <div class="section-heading">خامساً: المؤسسات التعليمية وتطور منظومة ريادة الأعمال</div>
+    <div class="card">
+      <h4>الجامعات أحد مكونات منظومة ريادة الأعمال</h4>
+      <ul>
+        <li>توفير رأس المال البشري الموجه للعمل الحر.</li>
+        <li>التدريب على توليد الأفكار الإبداعية الابتكارية القابلة للتحويل إلى منتجات اقتصادية.</li>
+        <li>التدريب على تأسيس وإدارة المشاريع الريادية الصغيرة.</li>
+        <li>إجراء البحوث العلمية وتقديم الاستشارات وخدمات الإرشاد.</li>
+        <li>نشر ثقافة العمل الحر بين الشباب والتعريف بالمشروع الصغير.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h4>🏫 المؤسسة التعليمية الذكية وريادة الأعمال</h4>
+      <p>تتناول نظريات التعلم الحديثة ما يعرف بالمعرفة الهشة (سطحية لا تتحول لتطبيق) والمعرفة العميقة (قائمة على الفهم وتتحول لتطبيقات عملية). المؤسسة الذكية تبني الفكر الإبداعي الابتكاري والسلوك الريادي لدى الطالب من خلال:</p>
+      <ul style="margin-top:0.5rem">
+        <li>النظرة الإيجابية للطالب.</li>
+        <li>الاتزان الانفعالي.</li>
+        <li>العقلية التساؤلية.</li>
+        <li>التعليم الذاتي.</li>
+        <li>التقويم غير المباشر.</li>
+      </ul>
+    </div>
+
+    <div class="summary-box">
+      <h4>📋 خلاصة الفصل الأول</h4>
+      <div class="summary-item"><div class="num">١</div><p>أهمية ريادة الأعمال وتزايد أهميتها ونمو التوجه إليها.</p></div>
+      <div class="summary-item"><div class="num">٢</div><p>تزايد أهمية ودور رواد ورائدات الأعمال في التنمية الاقتصادية والاجتماعية.</p></div>
+      <div class="summary-item"><div class="num">٣</div><p>التعامل مع ريادة الأعمال كمنظومة متكاملة وليست كجهود فردية.</p></div>
+      <div class="summary-item"><div class="num">٤</div><p>بناء وتفعيل منظومة ريادة الأعمال يتطلب بيئة إيجابية محفزة.</p></div>
+      <div class="summary-item"><div class="num">٥</div><p>مؤسسات التعليم الجامعي وما قبل الجامعي عليها مسؤولية كبيرة في توفير بيئة محفزة لاكتساب ثقافة ومهارات ريادة الأعمال.</p></div>
+    </div>
+  </div>
+
+  <!-- TAB: QUIZ Q -->
+  <div class="tab-content" id="t1b">
+    <div class="card">
+      <h4>❓ أسئلة مراجعة الفصل الأول</h4>
+      <div class="accordion">
+        <button class="accordion-header" onclick="toggleAcc(this)">ما الفرق بين ريادة الأعمال وثقافة ريادة الأعمال؟ <span class="accordion-icon">▼</span></button>
+        <div class="accordion-body">ريادة الأعمال: تشير إلى الفرد الواحد المتمتع بروح المبادرة وتحمل المخاطرة. أما ثقافة ريادة الأعمال: فتشير إلى المجموعة أو المجتمع حين تصبح صفات روح المبادرة وتحمل المخاطرة متكررة لدى مجموعة من الأشخاص في مكان أو منطقة معينة (نافع، ٢٠١٨).</div>
+      </div>
+      <div class="accordion">
+        <button class="accordion-header" onclick="toggleAcc(this)">ما مبررات ظهور ونمو التوجه نحو ريادة الأعمال؟ <span class="accordion-icon">▼</span></button>
+        <div class="accordion-body">ضعف الطاقة الاستيعابية الوظيفية للمؤسسات الحكومية، التطور التكنولوجي، تيسير الحصول على المعلومات، تزايد التجارة الإلكترونية، عدم الحاجة لتجهيزات رأسمالية كبيرة، والتوجه نحو الاقتصاد الخدمي. كما أن معدل البطالة في الدول العربية بلغ ٢٣.٣٪ في فئة الشباب (١٥-٢٤ سنة) مما دفع الدول لمراجعة أنظمتها التعليمية.</div>
+      </div>
+      <div class="accordion">
+        <button class="accordion-header" onclick="toggleAcc(this)">اذكر مكونات منظومة ريادة الأعمال وخصائصها. <span class="accordion-icon">▼</span></button>
+        <div class="accordion-body">١) ريادة الأعمال منظومة متكاملة تستوعب الجهود الفردية. ٢) ترفع كفاءة عملية اتخاذ القرارات (بالمبادأة، المشاركة، التكامل، الهادفية، الالتزام). ٣) تربط بين الإدارة والريادة والقيادة — وهي أضلاع ثلاثة متلازمة. ٤) مؤشر كفاءتها هو إيجاد الوظائف الجديدة وتحسين مستواها.</div>
+      </div>
+      <div class="accordion">
+        <button class="accordion-header" onclick="toggleAcc(this)">ما دور المؤسسات التعليمية في بناء منظومة ريادة الأعمال؟ <span class="accordion-icon">▼</span></button>
+        <div class="accordion-body">الجامعات أحد الأطراف الرئيسة في بيئة منظومة الأعمال وعليها: توفير رأس المال البشري، التدريب على توليد الأفكار الإبداعية، التدريب على تأسيس وإدارة المشاريع الريادية، إجراء البحوث العلمية، نشر ثقافة العمل الحر، وتأهيل الشباب واكسابهم المهارات اللازمة.</div>
+      </div>
+      <div class="accordion">
+        <button class="accordion-header" onclick="toggleAcc(this)">ما الأخطاء الشائعة في التوجه نحو ريادة الأعمال؟ <span class="accordion-icon">▼</span></button>
+        <div class="accordion-body">أبرز الأخطاء: التكاسل عن تنفيذ الفكرة الريادية، الاستهزاء بالأفكار غير التقليدية، التركيز على الفرد دون المنظومة ككل، المقارنة بين الإدارة والقيادة والريادة كأنها بدائل لبعضها بدلاً من كونها أضلاعاً متكاملة.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: EXAM NOTES -->
+  <div class="tab-content" id="t1c">
+    <div class="card">
+      <h4>📌 أهم نقاط الامتحان — الفصل الأول</h4>
+      <div class="exam-note"><span class="label">⭐ نقطة ١:</span> تعريف ريادة الأعمال لدى أربعة مراجع على الأقل (كمبريدج، أوكسفورد، بكري، مارتينيز، ليندر).</div>
+      <div class="exam-note"><span class="label">⭐ نقطة ٢:</span> الفرق بين ريادة الأعمال (فرد) وثقافة ريادة الأعمال (مجموعة/مجتمع).</div>
+      <div class="exam-note"><span class="label">⭐ نقطة ٣:</span> المبادئ الأساسية لريادة الأعمال السبعة (المبادرة، المبادأة، الإبداع، الابتكار، المخاطرة، القيادة، العمل الحر).</div>
+      <div class="exam-note"><span class="label">⭐ نقطة ٤:</span> سمات اتخاذ القرار في منظومة ريادة الأعمال (المبادأة، المشاركة، التكامل، الهادفية، الالتزام).</div>
+      <div class="exam-note"><span class="label">⭐ نقطة ٥:</span> الفرق بين المعرفة الهشة والمعرفة العميقة في المؤسسة التعليمية الذكية.</div>
+      <div class="exam-note"><span class="label">⭐ نقطة ٦:</span> نسبة مشاركة مشاريع ريادة الأعمال في الاقتصاد العالمي: ٩٠٪ من المشروعات الاقتصادية (محسن، ٢٠٢٣).</div>
+      <div class="exam-note"><span class="label">⭐ نقطة ٧:</span> معدل البطالة في الدول العربية (٢٣.٣٪ للشباب) ودوره في تنمية ريادة الأعمال.</div>
+      <div class="exam-note"><span class="label">⭐ نقطة ٨:</span> سمات المعلم الإبداعي الابتكاري القادر على إيجاد مناخ تعليمي ريادي (النظرة الإيجابية، الاتزان الانفعالي، العقلية التساؤلية، التعليم الذاتي، التقويم غير المباشر).</div>
+    </div>
+    <div class="concept-tags">
+      <span class="concept-tag">ريادة الأعمال</span>
+      <span class="concept-tag">رائد الأعمال</span>
+      <span class="concept-tag">ثقافة ريادة الأعمال</span>
+      <span class="concept-tag">منظومة ريادة الأعمال</span>
+      <span class="concept-tag">العمل الحر</span>
+      <span class="concept-tag">الاقتصاد الريادي</span>
+      <span class="concept-tag">الجامعة الرائدة</span>
+      <span class="concept-tag">المعرفة الهشة</span>
+      <span class="concept-tag">المعرفة العميقة</span>
+      <span class="concept-tag">SMARTEC</span>
+    </div>
+  </div>
+</div>
+
+<!-- ===== CHAPTER 2 ===== -->
+<div class="section" id="section-ch2">
+  <div class="breadcrumb">
+    <a onclick="showSection('home')">الرئيسية</a>
+    <span class="sep">›</span>
+    <span>الفصل الثاني</span>
+  </div>
+  <div class="content-header">
+    <div class="content-header-badge" style="background:rgba(76,201,240,0.15);color:var(--ch2)">٢</div>
+    <div>
+      <h2>تدريب وتطوير العقول الريادية</h2>
+      <p>The Entrepreneurial Mindset — المفهوم، الأبعاد، الاستراتيجيات، والمفاهيم الخاطئة</p>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab(this,'t2a')">المحتوى</button>
+    <button class="tab-btn" onclick="switchTab(this,'t2b')">أسئلة الفصل</button>
+    <button class="tab-btn" onclick="switchTab(this,'t2c')">ملاحظات الامتحان</button>
+  </div>
+
+  <div class="tab-content active" id="t2a">
+    <div class="card">
+      <h4>🧠 مقدمة — تشجيع الريادة في التعليم</h4>
+      <p>تبنّت الدول المتقدمة والنامية برامج وخططاً لتشجيع الريادة بين جيل الأطفال والشباب في المدارس والجامعات. تشتمل أنشطة هذا النهج على: بناء فرق العمل، خطط العمل، واستراتيجيات التعلم الذاتي والتعلم المبني على المشاريع.</p>
+    </div>
+
+    <div class="section-heading">أولاً: العقلية الريادية — The Entrepreneurial Mindset</div>
+
+    <div class="def-box">
+      <strong>Thum (2012)</strong>
+      <p>العقل هو مجموع المعرفة بما في ذلك المعتقدات والأفكار حول العالم ونفسك.</p>
+    </div>
+    <div class="def-box">
+      <strong>Carol Dweck (2006) — "عقلية التفكير"</strong>
+      <p>العقلية يمكن أن تكون ثابتة (تفترض أن مواهبك محددة) أو موجهة نحو النمو (تعتقد أنه يمكن تطوير مواهبك وقدراتك). والعقلية يمكن أن تتغير.</p>
+    </div>
+    <div class="def-box">
+      <strong>Ferrero & Fioro (2014)</strong>
+      <p>العقلية الريادية تدور حول تحليل العالم وفرصه وإمكانياته، وفهم كيف يمكن للفرد المساهمة في بناء النظام الاقتصادي والاجتماعي، وتحويل الأفكار إلى عمل لتحقيق الأهداف.</p>
+    </div>
+    <div class="def-box">
+      <strong>McGrath & MacMillan (2000)</strong>
+      <p>العقلية الريادية تقوم على ثلاثة عوامل: القدرة على الإحساس، القدرة على التصرف بسرعة، والقدرة على تعبئة الموارد حتى في ظل ظروف غير مستقرة.</p>
+    </div>
+
+    <div class="section-heading">ثانياً: أبعاد وخصائص العقلية الريادية (Daviset et al., 2015)</div>
+    <div class="card">
+      <h4>١. السمات</h4>
+      <div class="traits-grid">
+        <div class="trait-item"><h5>أ. الاستقلالية</h5><p>الرغبة في العمل بدرجة عالية من الاستقلالية.</p><div class="ex">مثال: أشعر بعدم الراحة عندما يُتوقع مني اتباع قواعد الآخرين.</div></div>
+        <div class="trait-item"><h5>ب. التفضيل للهيكل المحدود</h5><p>تفضيل المهام والمواقف ذات الهيكل الرسمي القليل.</p><div class="ex">مثال: أجد أنه من الممل العمل على مهام منظمة بشكل واضح.</div></div>
+        <div class="trait-item"><h5>ج. عدم المطابقة</h5><p>تفضيل العمل بطرق فريدة والاهتمام بالتميز.</p><div class="ex">مثال: أحب أن أتميز عن الآخرين.</div></div>
+        <div class="trait-item"><h5>د. قبول المخاطر</h5><p>الرغبة في متابعة فكرة أو هدف حتى عندما يكون احتمال النجاح منخفضاً.</p><div class="ex">مثال: أنا مستعد لتحمل قدر معين من المخاطر لتحقيق نجاح حقيقي.</div></div>
+        <div class="trait-item"><h5>هـ. التوجه الإجرائي</h5><p>ميل لإظهار المبادرة واتخاذ القرارات بسرعة.</p><div class="ex">مثال: أميل إلى اتخاذ القرارات بسرعة.</div></div>
+        <div class="trait-item"><h5>و. الشغف</h5><p>الميل لتجربة العمل على أنه مثير وممتع.</p><div class="ex">مثال: أنا متحمس للعمل الذي أقوم به.</div></div>
+        <div class="trait-item"><h5>ز. الحاجة إلى التحقق</h5><p>الرغبة في تحقيق مستوى عالٍ.</p><div class="ex">مثال: أريد أن أكون الأفضل في ما أقوم به.</div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h4>٢. المهارات</h4>
+      <div class="traits-grid">
+        <div class="trait-item"><h5>أ. التركيز المستقبلي</h5><p>القدرة على التفكير بعيداً عن الموقف المباشر والتخطيط للمستقبل.</p></div>
+        <div class="trait-item"><h5>ب. توليد الأفكار</h5><p>القدرة على توليد أفكار متعددة وجديدة وإيجاد مناهج متعددة لتحقيق الأهداف.</p></div>
+        <div class="trait-item"><h5>ج. التنفيذ</h5><p>القدرة على تحويل الأفكار إلى خطط قابلة للتنفيذ.</p></div>
+        <div class="trait-item"><h5>د. الثقة بالنفس</h5><p>اعتقاد عام بقدرة المرء على الاستفادة من المهارات لتحقيق أهداف مهمة.</p></div>
+        <div class="trait-item"><h5>هـ. التفاؤل</h5><p>القدرة على الحفاظ على موقف إيجابي بشكل عام.</p></div>
+        <div class="trait-item"><h5>و. المثابرة</h5><p>القدرة على الارتداد بسرعة من خيبة الأمل والبقاء مثابراً في مواجهة النكسات.</p></div>
+        <div class="trait-item"><h5>ز. حساسية الشخصية</h5><p>مستوى عالٍ من الحساسية والاهتمام برفاهية أولئك الذين يعملون معهم.</p></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h4>خمس خصائص للعقلية الريادية المشتركة (McGrath & MacMillan, 2000)</h4>
+      <ul>
+        <li>يبحثون بحماس عن فرص جديدة.</li>
+        <li>يتابعون الفرص مع الانضباط الهائل.</li>
+        <li>يسعون فقط لأفضل الفرص ويتجنبون استنفاد أنفسهم ومنظماتهم.</li>
+        <li>يركزون على التنفيذ — وعلى وجه التحديد التنفيذ التكيفي.</li>
+        <li>يشاركون طاقات الجميع في مجالهم.</li>
+      </ul>
+    </div>
+
+    <div class="section-heading">ثالثاً: تطوير العقلية الريادية</div>
+    <div class="card">
+      <h4>ثلاثة مجالات للتركيز (مارك هوبكنز، 2013)</h4>
+      <ul>
+        <li>تجنيد الحلفاء.</li>
+        <li>تطوير ميزة غير عادلة.</li>
+        <li>ابحث عن مجال "تنافس".</li>
+      </ul>
+    </div>
+
+    <div class="section-heading">فوائد تطوير عقلية ريادة الأعمال لصاحب العمل</div>
+    <div class="info-grid">
+      <div class="info-item"><div class="icon">🔧</div><h5>تعزيز حل المشكلات</h5><p>التعامل مع المشكلات من وجهات نظر مختلفة وإيجاد حلول مبتكرة بشكل استباقي.</p></div>
+      <div class="info-item"><div class="icon">🔄</div><h5>زيادة القدرة على التكيف</h5><p>تبني التقنيات الجديدة واتجاهات السوق وتعديل الاستراتيجيات بسرعة.</p></div>
+      <div class="info-item"><div class="icon">⚖️</div><h5>تحسين إدارة المخاطر</h5><p>تقييم المخاطر والمكافآت المحتملة واتخاذ قرارات محسوبة.</p></div>
+      <div class="info-item"><div class="icon">🎯</div><h5>تحديد الفرص</h5><p>اكتشاف الفرص التي قد يتجاهلها الآخرون وتحديد الفجوات في السوق.</p></div>
+      <div class="info-item"><div class="icon">🌱</div><h5>تنمية عقلية النمو</h5><p>النظر إلى حالات الفشل والنكسات على أنها فرص للتعلم.</p></div>
+    </div>
+
+    <div class="section-heading">استراتيجيات تنمية عقلية ريادة الأعمال</div>
+    <div class="card">
+      <ul>
+        <li><strong>تبني عقلية النمو:</strong> رؤية التحديات فرصاً للنمو بدلاً من عقبات.</li>
+        <li><strong>تنمية فضول التعلم:</strong> قراءة الكتب، حضور ورش العمل، الانضمام للشبكات المهنية.</li>
+        <li><strong>تحمل المخاطر المحسوبة:</strong> تقييم المخاطر والمكافآت بعد بحث شامل.</li>
+        <li><strong>تعزيز النهج الاستباقي:</strong> تحديد الأهداف والتخطيط للمستقبل واتخاذ الإجراءات.</li>
+        <li><strong>الإحاطة بأفراد متشابهين في التفكير:</strong> التواصل مع رواد الأعمال والمرشدين.</li>
+        <li><strong>تقبل الفشل كفرصة للتعلم:</strong> تحليل حالات الفشل واستخراج الدروس.</li>
+        <li><strong>تعزيز العقلية الموجهة نحو الحلول:</strong> إعادة صياغة المشكلات كفرص.</li>
+      </ul>
+    </div>
+
+    <div class="section-heading">المفاهيم الخاطئة الشائعة حول عقلية ريادة الأعمال</div>
+    <div class="card">
+      <ul>
+        <li><strong>١. المجازفة تهور:</strong> في الواقع، رواد الأعمال يحللون المخاطر والمكافآت بدقة — هم يأخذون مخاطر محسوبة.</li>
+        <li><strong>٢. رواد الأعمال يولدون ولا يُصنعون:</strong> ريادة الأعمال مهارة يمكن تطويرها وتعلمها بالعقلية الصحيحة والتصميم.</li>
+        <li><strong>٣. يحفزهم المال فقط:</strong> غالباً ما يكون الدافع هو الشغف بأفكارهم أو الرغبة في إحداث تأثير إيجابي.</li>
+        <li><strong>٤. يعملون بمفردهم:</strong> الناجحون منهم يفهمون قيمة التعاون وبناء فريق قوي.</li>
+        <li><strong>٥. يركزون دائماً على الفكرة الكبيرة التالية:</strong> الناجحون يركزون ويحددون الأولويات ولا يبحثون دائماً عن الشيء الكبير.</li>
+        <li><strong>٦. الفشل هو نهاية الطريق:</strong> لرواد الأعمال، الفشل فرصة تعلم قيمة وليس نتيجة سلبية.</li>
+      </ul>
+    </div>
+
+    <div class="section-heading">رابعاً: مصطلحات مرتبطة بالعقلية الريادية</div>
+    <div class="def-box">
+      <strong>التعليم الريادي — التعريف</strong>
+      <p>تزويد الأفراد بالمهارات العقلية والتنظيمية اللازمة لتمكينهم من إقامة المشاريع الخاصة بهم في المستقبل (Alexandria et al., 2014).</p>
+    </div>
+    <div class="def-box">
+      <strong>اليونسكو ويونيفوك الدولي (2010)</strong>
+      <p>خلق عقلية وثقافة الريادة والابتكار وحل المشاكل وترسيخ الثقة بالنفس لدى الأفراد في قدرتهم على النجاح فيما اختاروا.</p>
+    </div>
+
+    <div class="card">
+      <h4>مهارات التعليم الريادي (ماهر الحشوة، ٢٠١٢) — سبع فئات</h4>
+      <div class="skills-cats">
+        <div class="skill-cat"><h5>الفئة الأولى</h5><ul><li>التخطيط</li><li>التفكير الاستراتيجي</li><li>القيادة والإدارة</li><li>التسويق</li></ul></div>
+        <div class="skill-cat"><h5>الفئة الثانية</h5><ul><li>مهارات الإبداع</li><li>الابتكار</li></ul></div>
+        <div class="skill-cat"><h5>الفئة الثالثة</h5><ul><li>الاتصال</li><li>الإقناع</li><li>التفاوض</li><li>التشبيك</li></ul></div>
+        <div class="skill-cat"><h5>الفئة الرابعة</h5><ul><li>المخاطرة</li><li>اتخاذ القرار</li><li>احتمال عدم اليقين</li></ul></div>
+        <div class="skill-cat"><h5>الفئة الخامسة</h5><ul><li>حل المشكلات</li><li>التفكير الناقد</li><li>التفكير التحليلي</li></ul></div>
+        <div class="skill-cat"><h5>الفئة السادسة</h5><ul><li>معرفة الذات</li><li>فاعلية الذات</li><li>الثقة بالنفس</li></ul></div>
+        <div class="skill-cat"><h5>الفئة السابعة</h5><ul><li>القراءة</li><li>الكتابة</li><li>الحساب</li></ul></div>
+      </div>
+    </div>
+
+    <div class="def-box">
+      <strong>ثقافة ريادة الأعمال</strong>
+      <p>مجموعة المعارف والقيم والاتجاهات والمهارات التي تدعم المبادرات الفردية والنشاط الريادي والتشغيل الذاتي والعمل الحر، وتشجع على تملك المشروعات وإدارتها، وتسهم في نشر روح الطموح والمخاطرة المحسوبة.</p>
+    </div>
+
+    <div class="summary-box">
+      <h4>📋 خصائص ثقافة ريادة الأعمال</h4>
+      <div class="summary-item"><div class="num">١</div><p>تظهر وتزداد في مجالات العمل الخاص سواء فردياً أو جماعياً.</p></div>
+      <div class="summary-item"><div class="num">٢</div><p>التشغيل الذاتي محور أساسي — يعتمد الإنسان على نفسه في شؤون حياته.</p></div>
+      <div class="summary-item"><div class="num">٣</div><p>المناخ السائد يشجع المبادرات الفردية الذاتية ويحترمها حتى لو حدثت سقطات أو فشل.</p></div>
+      <div class="summary-item"><div class="num">٤</div><p>قيم المجتمع تسمح بتمكين المرأة وتشجيعها على تملك وإدارة المشروعات.</p></div>
+      <div class="summary-item"><div class="num">٥</div><p>تسود روح الطموح والمخاطرة من أجل رفع مستوى الحياة.</p></div>
+    </div>
+  </div>
+
+  <div class="tab-content" id="t2b">
+    <div class="card">
+      <h4>❓ أسئلة مراجعة الفصل الثاني</h4>
+      <div class="accordion">
+        <button class="accordion-header" onclick="toggleAcc(this)">ما الفرق بين العقلية الثابتة وعقلية النمو؟ <span class="accordion-icon">▼</span></button>
+        <div class="accordion-body">العقلية الثابتة: تفترض أن مواهبك وقدراتك محددة ولا يمكن تغييرها. عقلية النمو: تعتقد أنه يمكن تطوير مواهبك وقدراتك من خلال الجهد والتعلم. (Carol Dweck, 2006). وعقلية النمو هي الأساس للعقلية الريادية الناجحة.</div>
+      </div>
+      <div class="accordion">
+        <button class="accordion-header" onclick="toggleAcc(this)">اذكر سمات العقلية الريادية السبع وفق Daviset et al. <span class="accordion-icon">▼</span></button>
+        <div class="accordion-body">الاستقلالية، التفضيل للهيكل المحدود، عدم المطابقة، قبول المخاطر، التوجه الإجرائي، الشغف، الحاجة إلى التحقق.</div>
+      </div>
+      <div class="accordion">
+        <button class="accordion-header" onclick="toggleAcc(this)">كيف يمكن لعقلية ريادة الأعمال أن تقود الابتكار في الأعمال التجارية؟ <span class="accordion-icon">▼</span></button>
+        <div class="accordion-body">من خلال: احتضان التغيير، تحديد فجوات السوق، تشجيع الإبداع والابتكار داخل المنظمة، تحمل المخاطر المحسوبة، التأكيد على التركيز على العملاء، بناء شبكة قوية، وتنمية عقلية التعلم المستمر.</div>
+      </div>
+      <div class="accordion">
+        <button class="accordion-header" onclick="toggleAcc(this)">ما مصادر تطوير العقلية الريادية؟ <span class="accordion-icon">▼</span></button>
+        <div class="accordion-body">فصول ريادة الأعمال، الكتب والمقالات، التحدث مع رجال الأعمال ذوي الخبرة، أو التعلم من خلال التجربة والخطأ. الكتب: The Lean Startup، Think and Grow Rich، The Power of Habit. الدورات: Coursera، Udemy، LinkedIn Learning. برامج الإرشاد: SCORE، EO. الحاضنات ومسرعات الأعمال.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-content" id="t2c">
+    <div class="card">
+      <h4>📌 أهم نقاط الامتحان — الفصل الثاني</h4>
+      <div class="exam-note"><span class="label">⭐ نقطة ١:</span> تعريفات العقلية الريادية: Thum، Dweck، Ferrero & Fioro، McGrath & MacMillan.</div>
+      <div class="exam-note"><span class="label">⭐ نقطة ٢:</span> السمات السبع للعقلية الريادية (Daviset et al., 2015).</div>
+      <div class="exam-note"><span class="label">⭐ نقطة ٣:</span> المهارات السبع للعقلية الريادية.</div>
+      <div class="exam-note"><span class="label">⭐ نقطة ٤:</span> الخمس خصائص المشتركة عند الرياديين المعتادين (McGrath & MacMillan, 2000).</div>
+      <div class="exam-note"><span class="label">⭐ نقطة ٥:</span> المفاهيم الخاطئة الستة حول عقلية ريادة الأعمال.</div>
+      <div class="exam-note"><span class="label">⭐ نقطة ٦:</span> استراتيجيات تنمية عقلية ريادة الأعمال (٧ استراتيجيات).</div>
+      <div class="exam-note"><span class="label">⭐ نقطة ٧:</span> فئات مهارات التعليم الريادي السبع (ماهر الحشوة، ٢٠١٢).</div>
+      <div class="exam-note"><span class="label">⭐ نقطة ٨:</span> تعريف ثقافة ريادة الأعمال وخصائصها.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== CHAPTER 3 ===== -->
+<div class="section" id="section-ch3">
+  <div class="breadcrumb">
+    <a onclick="showSection('home')">الرئيسية</a>
+    <span class="sep">›</span>
+    <span>الفصل الثالث</span>
+  </div>
+  <div class="content-header">
+    <div class="content-header-badge" style="background:rgba(167,139,250,0.15);color:var(--ch3)">٣</div>
+    <div>
+      <h2>خصائص رائد الأعمال ومهاراته</h2>
+      <p>السمات، الخصائص، الأخطاء الشائعة، وتمييز رائد الأعمال عن غيره</p>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab(this,'t3a')">المحتوى</button>
+    <button class="tab-btn" onclick="switchTab(this,'t3b')">أسئلة الفصل</button>
+    <button class="tab-btn" onclick="switchTab(this,'t3c')">ملاحظات الامتحان</button>
+  </div>
+
+  <div class="tab-content active" id="t3a">
+    <div class="section-heading">خصائص ريادة الأعمال المستخلصة من التعريفات</div>
+    <div class="card">
+      <ul>
+        <li>ريادة الأعمال تساهم في إيجاد أنشطة اقتصادية جديدة من خلال البحوث والتطوير والإنتاج والتوزيع.</li>
+        <li>ريادة الأعمال منهج للبحث عن أو توليد الفرص دون التقيد بالإمكانيات أو الموارد المتاحة.</li>
+        <li>ريادة الأعمال هي عملية أو منظومة متكاملة تساهم في إيجاد أنشطة اقتصادية ومنشآت ناشئة وفرص وظيفية جديدة.</li>
+        <li>ريادة الأعمال هي تأسيس عمل أو مشروع ريادي قائم على فكرة تتسم بالإبداع والمخاطرة من خلال ممارسة عملية ترتبط بالمبادرة والمبادأة والعصامية.</li>
+        <li>ريادة الأعمال منظومة تبدأ بتحديد فكرة غير تقليدية ثم تحويلها إلى مشروع ريادي تجاري جديد.</li>
+      </ul>
+    </div>
+
+    <div class="section-heading">توجهات رواد الأعمال العامة</div>
+    <div class="info-grid">
+      <div class="info-item"><div class="icon">🚀</div><h5>تحويل الأفكار</h5><p>الرغبة والقدرة على تحويل الأفكار الريادية إلى مشاريع منتجة منافسة.</p></div>
+      <div class="info-item"><div class="icon">👥</div><h5>فرق العمل</h5><p>التوجه لامتلاك مهارة تأسيس فرق عمل قوية لتحويل الأفكار إلى واقع عملي.</p></div>
+      <div class="info-item"><div class="icon">⚡</div><h5>الطموح والمثابرة</h5><p>ليسوا عباقرة لكنهم طموحون لديهم أفكار ريادية لها مبرراتها واقعياً.</p></div>
+      <div class="info-item"><div class="icon">🎯</div><h5>دراسة الجدوى</h5><p>يحملون دراسة جدوى دقيقة سليمة وقدر محدود من الموارد لتحويل الأفكار لمشاريع ناجحة.</p></div>
+    </div>
+
+    <div class="section-heading">رائدات الأعمال — اعتبارات التحفيز</div>
+    <div class="card">
+      <h4>متطلبات بناء رائدات الأعمال</h4>
+      <ul>
+        <li>تهيئة بيئة ثقافية اجتماعية داعمة لبناء توجه إيجابي تجاه رائدات الأعمال.</li>
+        <li>تصميم وتنفيذ برامج نوعية في ريادة الأعمال توجَّه إلى رائدات الأعمال.</li>
+        <li>تحديد وتوصيف القطاعات والأنشطة الأكثر ملاءمة للقطاع النسائي.</li>
+        <li>بناء فريق مرشدات لرائدات الأعمال لتقديم الدعم الفني والمهني.</li>
+        <li>توعية رائدات الأعمال بشأن الاستراتيجيات الأكثر ملاءمة (التخصص والتركيز).</li>
+        <li>بناء رصيد معرفي من التجارب العملية لرائدات أعمال ناجحات كإطار مرجعي.</li>
+      </ul>
+    </div>
+
+    <div class="section-heading">أخطاء رائد الأعمال المبتدئ — تجنبها</div>
+    <div class="card">
+      <h4>أبرز الأخطاء الشائعة</h4>
+      <ul>
+        <li>التكاسل عن تنفيذ الفكرة الريادية وتأجيلها حتى يسبق الآخرون.</li>
+        <li>الاستهزاء بفكرة ما وعدم إخضاعها للدراسة قبل رفضها.</li>
+        <li>البحث عن فكرة مثالية بدلاً من البدء بتطوير فكرة واعدة متاحة.</li>
+        <li>التركيز على الفرد دون المنظومة ككل.</li>
+        <li>عدم إجراء دراسة جدوى دقيقة قبل البدء.</li>
+      </ul>
+    </div>
+
+    <div class="exam-note"><span class="label">📌 هام:</span> التجارب العملية تؤكد أن نفس الفكرة عادة ما تكون في ذهن العشرات من الأفراد، لكن المهم من يسبق بتنفيذها.</div>
+
+    <div class="section-heading">الفرق بين رائد الأعمال والمدير التقليدي</div>
+    <table class="content-table">
+      <tr><th>المعيار</th><th>المدير التقليدي</th><th>المدير الريادي القيادي</th></tr>
+      <tr><td>اتخاذ القرار</td><td>بطيء ومتحفظ</td><td>مبادر وسريع ومثابر</td></tr>
+      <tr><td>الموقف من المخاطرة</td><td>يتجنب المخاطرة</td><td>يتحمل المخاطرة المحسوبة</td></tr>
+      <tr><td>التوجه</td><td>يحافظ على الوضع القائم</td><td>يسعى للتغيير والتجديد</td></tr>
+      <tr><td>النظرة</td><td>قصيرة الأمد</td><td>استراتيجية بعيدة الأمد</td></tr>
+    </table>
+
+    <div class="summary-box">
+      <h4>📋 نقاط جوهرية في خصائص رائد الأعمال</h4>
+      <div class="summary-item"><div class="num">١</div><p>رائد الأعمال الناجح يمتلك سمات قيادية وريادية وإدارية في آنٍ واحد — هي أضلاع ثلاثة متلازمة.</p></div>
+      <div class="summary-item"><div class="num">٢</div><p>نجاح المنشآت الصغيرة يتطلب مديرين قياديين رياديين.</p></div>
+      <div class="summary-item"><div class="num">٣</div><p>بناء الشخصية المبدعة المبتكرة يتطلب منظومة متكاملة تتعاون فيها المؤسسات التعليمية والتربوية والثقافية.</p></div>
+      <div class="summary-item"><div class="num">٤</div><p>الفكرة الريادية لوحدها لا تكفي — المهم البدء بدراستها والتعجيل بتنفيذها بمجرد تأكيد وجود مؤشرات أولية بجدواها.</p></div>
+    </div>
+  </div>
+
+  <div class="tab-content" id="t3b">
+    <div class="card">
+      <h4>❓ أسئلة مراجعة الفصل الثالث</h4>
+      <div class="accordion">
+        <button class="accordion-header" onclick="toggleAcc(this)">ما التوجهات العامة التي تتوافر لدى رواد الأعمال؟ <span class="accordion-icon">▼</span></button>
+        <div class="accordion-body">الرغبة والقدرة على تحويل الأفكار الريادية إلى مشاريع منتجة منافسة. التوجه لامتلاك مهارة تأسيس فرق عمل قوية. المغامرة والتمتع برؤية أقرب إلى الأحلام مع المثابرة لتحويلها لمشاريع. ليسوا عباقرة لكنهم طموحون مبادرون. يحملون دراسة جدوى دقيقة. التحرك تجاه الأهداف SMARTEC لا فقط SMART.</div>
+      </div>
+      <div class="accordion">
+        <button class="accordion-header" onclick="toggleAcc(this)">ما العلاقة العضوية بين الإدارة والريادة والقيادة؟ <span class="accordion-icon">▼</span></button>
+        <div class="accordion-body">الإدارة والقيادة والريادة هي أضلاع ثلاثة متلازمة لتحقيق كفاءة وفعالية الأداء في المشروع الريادي الناجح. نجاح إدارة المشروع الريادي يتطلب فرداً لديه سمات ومهارات ريادية وقيادية. نجاح المنشآت الصغيرة يتطلب مديرين قياديين رياديين.</div>
+      </div>
+      <div class="accordion">
+        <button class="accordion-header" onclick="toggleAcc(this)">ما الأخطاء الشائعة في التوجه نحو ريادة الأعمال؟ <span class="accordion-icon">▼</span></button>
+        <div class="accordion-body">التكاسل عن تنفيذ الفكرة الريادية، الاستهزاء بالأفكار غير التقليدية (كثير من الأفكار التي استُهزئ بها تحولت لمشاريع ناجحة)، التركيز على الفرد دون المنظومة، عدم إجراء دراسة جدوى دقيقة، عدم الاستعداد لتحمل المخاطرة المحسوبة.</div>
+      </div>
+      <div class="accordion">
+        <button class="accordion-header" onclick="toggleAcc(this)">ما متطلبات تحفيز رائدات الأعمال؟ <span class="accordion-icon">▼</span></button>
+        <div class="accordion-body">تهيئة بيئة ثقافية اجتماعية داعمة. تصميم برامج نوعية. تحديد القطاعات الأكثر ملاءمة. بناء فريق مرشدات. توعيتهن بالاستراتيجيات الأكثر ملاءمة. بناء رصيد معرفي من تجارب رائدات أعمال ناجحات.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-content" id="t3c">
+    <div class="card">
+      <h4>📌 أهم نقاط الامتحان — الفصل الثالث</h4>
+      <div class="exam-note"><span class="label">⭐ نقطة ١:</span> التوجهات العامة الست لرواد الأعمال.</div>
+      <div class="exam-note"><span class="label">⭐ نقطة ٢:</span> الأخطاء الشائعة في التوجه نحو ريادة الأعمال وكيف يتجنبها رائد الأعمال.</div>
+      <div class="exam-note"><span class="label">⭐ نقطة ٣:</span> العلاقة العضوية بين الإدارة والريادة والقيادة كأضلاع ثلاثة متلازمة.</div>
+      <div class="exam-note"><span class="label">⭐ نقطة ٤:</span> متطلبات تحفيز رائدات الأعمال الست.</div>
+      <div class="exam-note"><span class="label">⭐ نقطة ٥:</span> الفرق بين المدير التقليدي والمدير الريادي القيادي.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== CHAPTER 4 ===== -->
+<div class="section" id="section-ch4">
+  <div class="breadcrumb">
+    <a onclick="showSection('home')">الرئيسية</a>
+    <span class="sep">›</span>
+    <span>الفصل الرابع</span>
+  </div>
+  <div class="content-header">
+    <div class="content-header-badge" style="background:rgba(52,211,153,0.15);color:var(--ch4)">٤</div>
+    <div>
+      <h2>المشروعات الريادية</h2>
+      <p>التأسيس، التمويل، الأشكال القانونية، والتوازن بين المشروع والدراسة</p>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab(this,'t4a')">المحتوى</button>
+    <button class="tab-btn" onclick="switchTab(this,'t4b')">أسئلة الفصل</button>
+    <button class="tab-btn" onclick="switchTab(this,'t4c')">ملاحظات الامتحان</button>
+  </div>
+
+  <div class="tab-content active" id="t4a">
+    <div class="section-heading">خيارات بدء المشروع الريادي</div>
+    <div class="start-options">
+      <div class="start-option">
+        <h5>١. البدء بمشروع جديد</h5>
+        <div class="pros-cons">
+          <div class="pros"><h6>نقاط القوة</h6><ul><li>دراسة تفصيلية متكاملة</li><li>مرونة في التخطيط</li><li>اختيار المشروع الملائم لقدراتك</li></ul></div>
+          <div class="cons"><h6>نقاط الضعف</h6><ul><li>يتطلب وقتاً وجهداً وتكلفة أكثر</li><li>قد تنقص الخبرة الكافية</li></ul></div>
+        </div>
+      </div>
+      <div class="start-option">
+        <h5>٢. شراء مشروع قائم</h5>
+        <div class="pros-cons">
+          <div class="pros"><h6>نقاط القوة</h6><ul><li>إجراءات ترخيص معدة مسبقاً</li><li>الاستفادة من سوق وعملاء سابقين</li><li>الاستفادة من سمعة المشروع</li></ul></div>
+          <div class="cons"><h6>نقاط الضعف</h6><ul><li>قد لا يُفصَح عن الأسباب الحقيقية للبيع</li><li>تكلفة الشراء قد تكون مرتفعة</li></ul></div>
+        </div>
+      </div>
+      <div class="start-option">
+        <h5>٣. الامتياز التجاري</h5>
+        <div class="pros-cons">
+          <div class="pros"><h6>نقاط القوة</h6><ul><li>الاستفادة من خبرة مانح الامتياز</li><li>قوة العلامة التجارية</li><li>الحصول على تمويل بأسعار مخفضة</li></ul></div>
+          <div class="cons"><h6>نقاط الضعف</h6><ul><li>التقيد بشروط مانح الامتياز</li><li>دفع قيمة الامتياز من المبيعات</li></ul></div>
+        </div>
+      </div>
+      <div class="start-option">
+        <h5>٤. العمل من المنزل</h5>
+        <div class="pros-cons">
+          <div class="pros"><h6>نقاط القوة</h6><ul><li>تكاليف أقل</li><li>مرونة في الوقت</li><li>استثمار المهارات القيادية</li></ul></div>
+          <div class="cons"><h6>نقاط الضعف</h6><ul><li>يمكن أن يكون مشروعاً جديداً، قائماً، أو امتيازاً تجارياً</li></ul></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-heading">الشكل القانوني لمنشآت الأعمال</div>
+    <div class="card">
+      <h4>أولاً: المؤسسة الفردية</h4>
+      <p>المنشأة التي يملكها شخص واحد ويكون لصاحبها الهيمنة الكاملة على كامل عناصرها وهو المسؤول الأول عن الإدارة وعن نتائجها.</p>
+      <div class="pros-cons" style="margin-top:1rem">
+        <div class="pros"><h6>نقاط القوة</h6><ul><li>إجراءات ترخيص سهلة</li><li>حرية اختيار الحجم والتمويل</li><li>استقلالية أكبر في القرارات</li><li>الانفراد بكافة الأرباح</li></ul></div>
+        <div class="cons"><h6>نقاط الضعف</h6><ul><li>مسؤوليات كثيرة يتحملها بمفرده</li><li>تحمل المخاطر بمفرده</li><li>قدرات مادية محدودة</li></ul></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h4>ثانياً: الشركة</h4>
+      <p>المنشأة التي يملكها أكثر من شخص، يسهم كل منهم بتقديم حصة/نصيب من مال أو عمل، لاقتسام ما قد ينشأ عن المشروع من ربح أو خسارة. والشركة شخص معنوي له وجود قانوني مستقل عن شخصيات الشركاء.</p>
+      <div class="pros-cons" style="margin-top:1rem">
+        <div class="pros"><h6>نقاط القوة</h6><ul><li>تقسيم العمل والمسؤوليات</li><li>وجود مجلس إدارة</li><li>توزيع المخاطر بين الشركاء</li><li>جمع الأموال بشكل أسهل</li></ul></div>
+        <div class="cons"><h6>نقاط الضعف</h6><ul><li>صعوبة التأسيس</li><li>لا يتم التنازل عن الحصة دون موافقة الشركاء</li><li>حرية أقل في اتخاذ القرارات</li></ul></div>
+      </div>
+    </div>
+
+    <div class="section-heading">التوازن بين المشروع والدراسة</div>
+    <div class="info-grid">
+      <div class="info-item"><div class="icon">🎯</div><h5>أ. الواقعية</h5><p>وضع أهداف واقعية للمشروع بحيث يمكن تحقيقها.</p></div>
+      <div class="info-item"><div class="icon">📅</div><h5>ب. التخطيط الجيد</h5><p>تخطيط الأعمال في بداية كل أسبوع وكل شهر وتقسيمها لمراحل زمنية.</p></div>
+      <div class="info-item"><div class="icon">⏰</div><h5>ج. إدارة الوقت</h5><p>تحديد أوقات للدراسة وأوقات للعمل لتجنب تراكم الأعمال.</p></div>
+      <div class="info-item"><div class="icon">🔄</div><h5>د. الاستفادة المزدوجة</h5><p>البحث عن فرص لاستغلال أعمال الجامعة لخدمة المشروع والعكس.</p></div>
+      <div class="info-item"><div class="icon">🌿</div><h5>هـ. وقت للراحة</h5><p>تحديد وقت للراحة والعائلة والعبادة — لا تُضحِّ بها.</p></div>
+      <div class="info-item"><div class="icon">🤝</div><h5>و. التفويض</h5><p>الاستعانة بمن حولك للقيام ببعض الأعمال المساندة عند الحاجة.</p></div>
+    </div>
+
+    <div class="section-heading">مصفوفة الأولويات (ستيفن كوفي)</div>
+    <table class="content-table">
+      <tr><th></th><th>عاجل</th><th>غير عاجل</th></tr>
+      <tr><td><strong>مهم</strong></td><td>المربع الأول — أفعل فوراً (الاختبار غداً)</td><td>المربع الثاني — خطط له (التخطيط لرحلة)</td></tr>
+      <tr><td><strong>غير مهم</strong></td><td>المربع الثالث — تعامل معه بحذر (تزويد السيارة)</td><td>المربع الرابع — تجنب أو قلل (مواقع التواصل)</td></tr>
+    </table>
+
+    <div class="section-heading">حقوق الزبون — مبادئ أساسية</div>
+    <div class="card">
+      <ul>
+        <li><strong>١.</strong> إتاحة الفرصة للزبون لاختيار ما يريد — تعدد الأنواع والأصناف.</li>
+        <li><strong>٢.</strong> بيان مواصفات السلعة بشكل واضح وصحيح — السعر، المواصفات، تاريخ الإنتاج.</li>
+        <li><strong>٣.</strong> السماح باستبدال السلعة أو إعادتها مع استرجاع ثمنها إذا كان بها عيب.</li>
+        <li><strong>٤.</strong> تقديم سلع أو خدمات آمنة الاستخدام بالنسبة للزبون.</li>
+        <li><strong>٥.</strong> إتاحة للزبون إمكانية الاعتراض أو الشكوى أو الاقتراح والترحيب بذلك.</li>
+      </ul>
+    </div>
+
+    <div class="summary-box">
+      <h4>📋 خلاصة الفصل الرابع</h4>
+      <div class="summary-item"><div class="num">١</div><p>أربعة خيارات لبدء المشروع: مشروع جديد، شراء قائم، امتياز تجاري، عمل من المنزل — لكل منها نقاط قوة وضعف.</p></div>
+      <div class="summary-item"><div class="num">٢</div><p>شكلان قانونيان رئيسيان: المؤسسة الفردية والشركة — لكل منها ميزات وعيوب.</p></div>
+      <div class="summary-item"><div class="num">٣</div><p>مصفوفة الأولويات أداة فعّالة لتحقيق التوازن بين المشروع والدراسة.</p></div>
+      <div class="summary-item"><div class="num">٤</div><p>رضا الزبون هو محور اهتمام صاحب المشروع — والزبون على حق دائماً.</p></div>
+    </div>
+  </div>
+
+  <div class="tab-content" id="t4b">
+    <div class="card">
+      <h4>❓ أسئلة مراجعة الفصل الرابع</h4>
+      <div class="accordion">
+        <button class="accordion-header" onclick="toggleAcc(this)">قارن بين المؤسسة الفردية والشركة كشكلين قانونيين. <span class="accordion-icon">▼</span></button>
+        <div class="accordion-body">المؤسسة الفردية: يملكها شخص واحد، إجراءات ترخيص أسهل، حرية أكبر في القرار، الانفراد بالأرباح، لكنها تتطلب تحمل جميع المخاطر وحده. الشركة: يملكها أكثر من شخص، تقسيم المسؤوليات والمخاطر، وجود مجلس إدارة، جمع الأموال أسهل، لكن إجراءات التأسيس أصعب وحرية أقل في القرار.</div>
+      </div>
+      <div class="accordion">
+        <button class="accordion-header" onclick="toggleAcc(this)">ما مصفوفة الأولويات وكيف تُساعد رائد الأعمال الطالب؟ <span class="accordion-icon">▼</span></button>
+        <div class="accordion-body">مصفوفة وضعها ستيفن كوفي تُساعد على تحديد الأولويات عبر تقسيم الأنشطة إلى أربعة مربعات: (مهم وعاجل - أفعل فوراً)، (مهم وغير عاجل - خطط له)، (غير مهم وعاجل - تعامل بحذر)، (غير مهم وغير عاجل - تجنبه). تساعد الطالب/رائد الأعمال على توزيع وقته بين الدراسة والمشروع بفعالية.</div>
+      </div>
+      <div class="accordion">
+        <button class="accordion-header" onclick="toggleAcc(this)">ما حقوق الزبون التي يجب أن يراعيها رائد الأعمال؟ <span class="accordion-icon">▼</span></button>
+        <div class="accordion-body">خمسة حقوق معتمدة عالمياً: ١) حرية الاختيار، ٢) الحصول على معلومات واضحة وصحيحة عن المنتج، ٣) استبدال السلعة أو استرجاع ثمنها إذا كان بها عيب، ٤) الأمان في الاستخدام، ٥) إمكانية الاعتراض والشكوى والاقتراح.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-content" id="t4c">
+    <div class="card">
+      <h4>📌 أهم نقاط الامتحان — الفصل الرابع</h4>
+      <div class="exam-note"><span class="label">⭐ نقطة ١:</span> الخيارات الأربعة لبدء المشروع ونقاط القوة والضعف لكل منها.</div>
+      <div class="exam-note"><span class="label">⭐ نقطة ٢:</span> الفرق بين المؤسسة الفردية والشركة كشكلين قانونيين.</div>
+      <div class="exam-note"><span class="label">⭐ نقطة ٣:</span> مصفوفة الأولويات الأربعة (كوفي).</div>
+      <div class="exam-note"><span class="label">⭐ نقطة ٤:</span> طرق التوازن بين المشروع والدراسة (٦ طرق).</div>
+      <div class="exam-note"><span class="label">⭐ نقطة ٥:</span> حقوق الزبون الخمسة المعتمدة عالمياً.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== CHAPTER 5 ===== -->
+<div class="section" id="section-ch5">
+  <div class="breadcrumb">
+    <a onclick="showSection('home')">الرئيسية</a>
+    <span class="sep">›</span>
+    <span>الفصل الخامس</span>
+  </div>
+  <div class="content-header">
+    <div class="content-header-badge" style="background:rgba(248,113,113,0.15);color:var(--ch5)">٥</div>
+    <div>
+      <h2>إدارة الأعمال وفرص العمل المستقبلية</h2>
+      <p>ممارسات ريادة الأعمال، التسويق، الموارد المالية، وإدارة الأعمال</p>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab(this,'t5a')">المحتوى</button>
+    <button class="tab-btn" onclick="switchTab(this,'t5b')">أسئلة الفصل</button>
+    <button class="tab-btn" onclick="switchTab(this,'t5c')">ملاحظات الامتحان</button>
+  </div>
+
+  <div class="tab-content active" id="t5a">
+    <div class="card">
+      <h4>🌐 مقدمة — مستقبل ريادة الأعمال</h4>
+      <p>يتوقع أن تستمر ريادة الأعمال في النمو في المستقبل بفعل: النمو السكاني (زيادة الطلب)، التقدم التكنولوجي (خلق فرص جديدة)، والتغيرات الاجتماعية كالعولمة.</p>
+    </div>
+
+    <div class="section-heading">أولاً: تطوير وتدريب العقول الريادية — ممارسات ريادة الأعمال</div>
+    <div class="info-grid">
+      <div class="info-item"><div class="icon">💡</div><h5>الابتكار</h5><p>تطوير منتجات أو خدمات جديدة أو تحسين المنتجات أو الخدمات الحالية.</p></div>
+      <div class="info-item"><div class="icon">⚖️</div><h5>المخاطرة</h5><p>استعداد رائد الأعمال لتحمل الخسائر المحتملة في سبيل تحقيق النجاح.</p></div>
+      <div class="info-item"><div class="icon">🧭</div><h5>التفكير الاستراتيجي</h5><p>القدرة على التخطيط للمستقبل واتخاذ القرارات التي ستساعد على تحقيق الأهداف.</p></div>
+      <div class="info-item"><div class="icon">⏱️</div><h5>إدارة الوقت</h5><p>القدرة على استثمار الوقت بفعالية لإنجاز المهام والأهداف.</p></div>
+      <div class="info-item"><div class="icon">👑</div><h5>القيادة</h5><p>القدرة على إلهام وتحفيز الآخرين لتحقيق الأهداف المشتركة.</p></div>
+      <div class="info-item"><div class="icon">📣</div><h5>التسويق</h5><p>عملية الترويج للمنتجات أو الخدمات لجذب العملاء/الزبائن.</p></div>
+      <div class="info-item"><div class="icon">💰</div><h5>الإدارة المالية</h5><p>عملية إدارة الأموال اللازمة لتشغيل الشركة.</p></div>
+      <div class="info-item"><div class="icon">🤝</div><h5>إدارة الموارد البشرية</h5><p>عملية توظيف وتدريب وإدارة الموظفين.</p></div>
+    </div>
+
+    <div class="section-heading">ثانياً: التسويق — Marketing</div>
+    <div class="def-box">
+      <strong>تعريف التسويق</strong>
+      <p>"التسويق هو إتاحة المنتج المناسب، بالكمية المناسبة، في المكان المناسب، وفي الوقت المناسب، وتحقيق أرباح من ذلك."</p>
+    </div>
+
+    <div class="section-heading">المزيج التسويقي — 4Ps</div>
+    <div class="p4-grid">
+      <div class="p4-item">
+        <div class="p-icon">📦</div>
+        <h5>المنتج — Product</h5>
+        <p>كل ما يمكن بيعه يُقدَّم للسوق بغرض الاقتناء أو البيع أو الاستخدام. يمكن أن يكون سلعة ملموسة أو خدمة غير ملموسة.</p>
+      </div>
+      <div class="p4-item">
+        <div class="p-icon">📍</div>
+        <h5>المكان — Place</h5>
+        <p>التوزيع: عملية نقل السلع والخدمات من مصادر إنتاجها إلى المستهلك. اختيار منافذ التوزيع قرار استراتيجي.</p>
+      </div>
+      <div class="p4-item">
+        <div class="p-icon">💲</div>
+        <h5>السعر — Price</h5>
+        <p>من أصعب القرارات التسويقية. السعر أول ما يقيمه المستهلك ويستند إليه في قرار الشراء.</p>
+      </div>
+      <div class="p4-item">
+        <div class="p-icon">📢</div>
+        <h5>الترويج — Promotion</h5>
+        <p>عملية الاتصال بالجمهور بهدف التأثير في سلوكهم. يتضمن الإعلان، البيع الشخصي، الدعاية، تنشيط المبيعات، والتسويق المباشر.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h4>معايير تسعير المنتج — ثلاثة معايير</h4>
+      <ul>
+        <li><strong>التسعير بحسب التكلفة:</strong> سعر بيع الوحدة = التكاليف الفعلية + قيمة ربح (٪...).</li>
+        <li><strong>التسعير بحسب سعر المنافسين:</strong> سعر بيع الوحدة = سعر بيع الوحدة لدى المنافسين.</li>
+        <li><strong>التسعير بحسب السوق:</strong> سعر بيع الوحدة = سعر البيع المتوقع أو المرغوب من قِبَل المشترين.</li>
+      </ul>
+      <div style="background:var(--surface2);border-radius:8px;padding:0.75rem 1rem;margin-top:0.75rem;font-size:0.85rem">
+        <strong style="color:var(--accent)">الإيراد الكلي</strong> = سعر بيع الوحدة × عدد وحدات المنتج المباعة<br>
+        <strong style="color:var(--accent)">إجمالي الربح</strong> = الإيراد الكلي − التكاليف الكلية
+      </div>
+    </div>
+
+    <div class="card">
+      <h4>تكاليف المشروع — قسمان</h4>
+      <ul>
+        <li><strong>التكاليف الأولية (تكاليف البداية):</strong> تكاليف تُنفق لمرة واحدة عند بداية المشروع — الأجهزة، الأثاث، التجهيزات.</li>
+        <li><strong>تكاليف التشغيل:</strong> التكاليف الضرورية لتشغيل المشروع — الكهرباء، الماء، الرواتب، الإيجار، الدعاية.</li>
+      </ul>
+    </div>
+
+    <div class="section-heading">ثالثاً: الموارد المالية</div>
+    <div class="card">
+      <h4>مصادر التمويل المتاحة لرائد الأعمال</h4>
+      <ul>
+        <li><strong>رأس المال الخاص (الاستثمار الذاتي):</strong> المدخرات الشخصية أو أرباح أعمال حالية.</li>
+        <li><strong>الأسرة وجماعة الرفاق:</strong> ثاني مصدر يلجأ إليه رائد الأعمال المبتدئ — هبة أو قرض.</li>
+        <li><strong>القروض والائتمان:</strong> البنوك والمصارف والمؤسسات المالية.</li>
+        <li><strong>التمويل الحكومي:</strong> صناديق تمويل مشروعات صغيرة ومتوسطة — منح أو قروض حسنة.</li>
+        <li><strong>حاضنات الأعمال:</strong> تقدم تأهيلاً ودعماً مادياً ومعنوياً واستضافة وإرشاداً.</li>
+        <li><strong>رأس المال الاستثماري الاجتماعي:</strong> استثمارات تهدف لتحقيق عوائد مالية واجتماعية.</li>
+        <li><strong>التمويل الجماعي:</strong> منصات التمويل الجماعي لجمع الأموال من مستثمرين صغار.</li>
+        <li><strong>المنح والجوائز:</strong> دعم مالي غير مسترد مخصص للشركات الناشئة والابتكارات.</li>
+        <li><strong>الجمعيات التعاونية:</strong> مشاركة الأعضاء في الموارد المالية لتحقيق الأهداف المشتركة.</li>
+        <li><strong>برامج التسريع والحاضنات:</strong> تدريب، توجيه، ودعم مالي للشركات الناشئة.</li>
+      </ul>
+    </div>
+
+    <div class="section-heading">حاضنات الأعمال</div>
+    <div class="def-box">
+      <strong>تعريف حاضنة الأعمال</strong>
+      <p>وحدة خدمية تهدف إلى تحويل الأفكار والابتكارات إلى مشروعات اقتصادية منتجة، من خلال تقديم عدد من الخدمات لرواد الأعمال تشمل التأهيل والدعم المادي والمعنوي والاستضافة والإرشاد.</p>
+    </div>
+    <div class="card">
+      <h4>أنشطة حاضنات الأعمال</h4>
+      <ul>
+        <li>توفر مكاناً طبيعياً آمناً مرناً مزوداً بالمعدات.</li>
+        <li>توفر استشارات مهنية وإدارية وتقنية مع الاتصال بمصادر رأس المال.</li>
+        <li>عادة تنشأ في الجامعات التي توفر كفاءات عالية التخصص.</li>
+        <li>تُنتج مجتمعاً تداخلياً من رواد الأعمال والأكاديميين والمهتمين.</li>
+        <li>تعمل كحلقة وصل مع المجتمع والمنشآت الباحثة عن التقنيات والابتكارات.</li>
+      </ul>
+    </div>
+
+    <div class="section-heading">رابعاً: إدارة الأعمال — Business Management</div>
+    <div class="def-box">
+      <strong>تعريف إدارة الأعمال</strong>
+      <p>عملية تنظيم وتنسيق الأعمال التجارية التي تشمل: إنتاج الآلات والمواد، والتمويل، والابتكار، والتسويق، وإدارة مصادر الأعمال. والإدارة مسؤولة عن التخطيط، والتنظيم، والتحكم، وتوجيهها نحو تحقيق أهداف المؤسسة أو الشركة.</p>
+    </div>
+
+    <div class="card">
+      <h4>تخصصات إدارة الأعمال — أمثلة (٢٠+ فرعاً)</h4>
+      <div class="concept-tags">
+        <span class="concept-tag">الإدارة المالية</span>
+        <span class="concept-tag">الإدارة التسويقية</span>
+        <span class="concept-tag">إدارة المبيعات</span>
+        <span class="concept-tag">إدارة الخدمات</span>
+        <span class="concept-tag">إدارة الموارد البشرية</span>
+        <span class="concept-tag">إدارة المشتريات</span>
+        <span class="concept-tag">إدارة الإنتاج</span>
+        <span class="concept-tag">إدارة البرامج والمشاريع</span>
+        <span class="concept-tag">إدارة الجودة</span>
+        <span class="concept-tag">إدارة الابتكار</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <h4>مميزات دراسة إدارة الأعمال</h4>
+      <ul>
+        <li><strong>توفر فرص عمل:</strong> زيادة فرص العمل في تخصصات الأعمال والتمويل بنسبة ٥٪ (2019-2029م).</li>
+        <li><strong>نطاق واسع من المجالات الوظيفية:</strong> مدير مبيعات، مدير إنتاج، محلل إداري وغيرها.</li>
+        <li><strong>اكتساب المهارات المطلوبة لسوق العمل:</strong> الكفاءة والانضباط اللازمين للانخراط في سوق العمل.</li>
+        <li><strong>إتقان مهارات القيادة:</strong> قيادة الآخرين، التواصل بفاعلية، التفكير الناقد، اتخاذ قرارات تجارية صائبة.</li>
+      </ul>
+    </div>
+
+    <div class="section-heading">فرص العمل — التحديات والتهديدات</div>
+    <div class="card">
+      <h4>التحديات التي تواجه الحكومات في توفير فرص العمل</h4>
+      <ul>
+        <li><strong>نقص الموارد المالية:</strong> عجز الحكومات أحياناً عن تمويل المشاريع الكبيرة.</li>
+        <li><strong>تغيّر الظروف الاقتصادية:</strong> الانخفاض الاقتصادي والتضخم يؤثران على الاستثمار.</li>
+        <li><strong>التحديات التقنية:</strong> التقنيات الحديثة قد تستحوذ على بعض فرص العمل.</li>
+        <li><strong>التهديدات الصناعية:</strong> المنافسة الدولية على العمالة الأرخص والأكثر كفاءة.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h4>تحديات رائد الأعمال الشخصية — الواقع العملي</h4>
+      <ul>
+        <li><strong>عدم استقرار الدخل:</strong> بعض المشروعات الصغيرة لا تربح إلا بحدود ضئيلة في المراحل الأولى.</li>
+        <li><strong>المخاطرة (خسارة الاستثمار):</strong> ضريبة الفشل في المشروعات الصغيرة منخفضة مقارنة بالكبيرة.</li>
+        <li><strong>ساعات العمل الطويلة:</strong> سيقضي رائد الأعمال جُلَّ وقته منهكاً بتفاصيل المشروع.</li>
+        <li><strong>ضغط العمل النفسي:</strong> الفشل سيكون قاسياً ويولد ضغطاً وقلقاً كبيراً.</li>
+        <li><strong>المسؤولية الكاملة:</strong> رائد الأعمال مضطر لاتخاذ قرارات في أمور خارج تخصصه.</li>
+        <li><strong>الإحباط:</strong> النتائج المُبهرة لا تأتي عاجلاً، مما يتطلب صبراً وتفاؤلاً.</li>
+      </ul>
+    </div>
+
+    <div class="summary-box">
+      <h4>📋 خلاصة الفصل الخامس</h4>
+      <div class="summary-item"><div class="num">١</div><p>ممارسات ريادة الأعمال: الابتكار، المخاطرة، التفكير الاستراتيجي، إدارة الوقت، القيادة، التسويق، المبيعات، إدارة الموارد البشرية، الإدارة المالية.</p></div>
+      <div class="summary-item"><div class="num">٢</div><p>المزيج التسويقي 4Ps: المنتج، المكان، السعر، الترويج.</p></div>
+      <div class="summary-item"><div class="num">٣</div><p>معايير تسعير المنتج الثلاثة: بحسب التكلفة، بحسب المنافسين، بحسب السوق.</p></div>
+      <div class="summary-item"><div class="num">٤</div><p>مصادر التمويل المتعددة: الاستثمار الذاتي، الأسرة والأصدقاء، القروض، التمويل الحكومي، الحاضنات، التمويل الجماعي.</p></div>
+      <div class="summary-item"><div class="num">٥</div><p>حاضنات الأعمال: وحدات خدمية لتحويل الأفكار لمشروعات منتجة تقدم تأهيلاً ودعماً متكاملاً.</p></div>
+    </div>
+  </div>
+
+  <div class="tab-content" id="t5b">
+    <div class="card">
+      <h4>❓ أسئلة مراجعة الفصل الخامس</h4>
+      <div class="accordion">
+        <button class="accordion-header" onclick="toggleAcc(this)">ما عناصر المزيج التسويقي 4Ps؟ اشرح كل عنصر. <span class="accordion-icon">▼</span></button>
+        <div class="accordion-body">١) المنتج Product: كل ما يمكن بيعه يُقدَّم للسوق، سواء سلعة ملموسة أو خدمة غير ملموسة. ٢) المكان Place: التوزيع — نقل السلع من الإنتاج للمستهلك، واختيار منافذ التوزيع قرار استراتيجي. ٣) السعر Price: من أصعب القرارات، لارتباطه بكينونة المنتج، وهو أول ما يقيمه المستهلك. ٤) الترويج Promotion: عملية الاتصال بالجمهور للتأثير في سلوكهم، يشمل الإعلان والبيع الشخصي والدعاية وتنشيط المبيعات والتسويق المباشر.</div>
+      </div>
+      <div class="accordion">
+        <button class="accordion-header" onclick="toggleAcc(this)">ما الفرق بين تكاليف البداية وتكاليف التشغيل؟ <span class="accordion-icon">▼</span></button>
+        <div class="accordion-body">تكاليف البداية (الأولية): تُنفق لمرة واحدة عند بداية المشروع — كالأجهزة والأثاث والتجهيزات والديكور. تكاليف التشغيل: تكاليف مستمرة ضرورية لتشغيل المشروع — كالكهرباء والماء والهاتف والرواتب والتأمين والإيجار والدعاية.</div>
+      </div>
+      <div class="accordion">
+        <button class="accordion-header" onclick="toggleAcc(this)">ما حاضنة الأعمال وما أنشطتها؟ <span class="accordion-icon">▼</span></button>
+        <div class="accordion-body">حاضنة الأعمال: وحدة خدمية تهدف لتحويل الأفكار والابتكارات لمشروعات اقتصادية منتجة. أنشطتها: توفر مكاناً آمناً مزوداً بالمعدات، استشارات مهنية وإدارية وتقنية، تنشأ عادة في الجامعات، تُنتج مجتمعاً تداخلياً، وتعمل كحلقة وصل مع المجتمع.</div>
+      </div>
+      <div class="accordion">
+        <button class="accordion-header" onclick="toggleAcc(this)">ما التحديات الشخصية التي يواجهها رائد الأعمال؟ <span class="accordion-icon">▼</span></button>
+        <div class="accordion-body">عدم استقرار الدخل، المخاطرة (خسارة الاستثمار)، ساعات العمل الطويلة، مستوى ارتباطات عائلية أقل، المعاناة من ضغط العمل، المسؤولية الكاملة، الإحباط من تأخر النتائج.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tab-content" id="t5c">
+    <div class="card">
+      <h4>📌 أهم نقاط الامتحان — الفصل الخامس</h4>
+      <div class="exam-note"><span class="label">⭐ نقطة ١:</span> ممارسات ريادة الأعمال التسع (الابتكار، المخاطرة، التفكير الاستراتيجي، إدارة الوقت، القيادة، التسويق، المبيعات، إدارة الموارد البشرية، الإدارة المالية).</div>
+      <div class="exam-note"><span class="label">⭐ نقطة ٢:</span> تعريف التسويق والمزيج التسويقي 4Ps بالتفصيل.</div>
+      <div class="exam-note"><span class="label">⭐ نقطة ٣:</span> المعايير الثلاثة لتسعير المنتج والمعادلات.</div>
+      <div class="exam-note"><span class="label">⭐ نقطة ٤:</span> الفرق بين تكاليف البداية وتكاليف التشغيل.</div>
+      <div class="exam-note"><span class="label">⭐ نقطة ٥:</span> مصادر التمويل المتاحة لرائد الأعمال (١٠+ مصادر).</div>
+      <div class="exam-note"><span class="label">⭐ نقطة ٦:</span> تعريف حاضنة الأعمال وأنشطتها.</div>
+      <div class="exam-note"><span class="label">⭐ نقطة ٧:</span> تعريف إدارة الأعمال ومميزات دراستها الأربعة.</div>
+      <div class="exam-note"><span class="label">⭐ نقطة ٨:</span> التحديات الشخصية التي يواجهها رائد الأعمال (٦ تحديات).</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== GLOSSARY ===== -->
+<div class="section" id="section-glossary">
+  <div class="content-header">
+    <div class="content-header-badge" style="background:rgba(76,201,240,0.15);color:var(--ch2)">📚</div>
+    <div>
+      <h2>المعجم المصطلحي</h2>
+      <p>جميع المصطلحات والتعريفات الأساسية في المقرر — قابل للبحث</p>
+    </div>
+  </div>
+  <input class="glossary-search" id="glossarySearch" type="text" placeholder="ابحث عن مصطلح..." oninput="filterGlossary(this.value)">
+  <div id="glossaryList"></div>
+</div>
+
+<!-- ===== FLASHCARDS ===== -->
+<div class="section" id="section-flashcards">
+  <div class="content-header">
+    <div class="content-header-badge" style="background:rgba(167,139,250,0.15);color:var(--ch3)">🃏</div>
+    <div>
+      <h2>البطاقات التعليمية</h2>
+      <p>راجع المفاهيم الأساسية بطريقة تفاعلية — انقر على البطاقة للكشف عن الإجابة</p>
+    </div>
+  </div>
+  <div class="flashcards-container">
+    <div class="flashcard-nav">
+      <select id="fcFilter" onchange="initFlashcards()">
+        <option value="all">جميع الفصول</option>
+        <option value="ch1">الفصل الأول</option>
+        <option value="ch2">الفصل الثاني</option>
+        <option value="ch3">الفصل الثالث</option>
+        <option value="ch4">الفصل الرابع</option>
+        <option value="ch5">الفصل الخامس</option>
+      </select>
+      <span class="flashcard-counter" id="fcCounter">بطاقة ١ من ١</span>
+    </div>
+    <div class="flashcard-scene" onclick="flipCard()">
+      <div class="flashcard" id="flashcard">
+        <div class="flashcard-front">
+          <div class="hint">انقر للكشف عن الإجابة</div>
+          <div class="question" id="fcQuestion">جاري التحميل...</div>
+        </div>
+        <div class="flashcard-back">
+          <div class="label">الإجابة</div>
+          <div class="answer" id="fcAnswer">...</div>
+        </div>
+      </div>
+    </div>
+    <div class="flashcard-controls">
+      <button class="fc-btn" onclick="prevCard()">◄ السابقة</button>
+      <button class="fc-btn primary" onclick="flipCard()">اقلب البطاقة</button>
+      <button class="fc-btn" onclick="nextCard()">التالية ►</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== QUIZZES ===== -->
+<div class="section" id="section-quizzes">
+  <div class="content-header">
+    <div class="content-header-badge" style="background:rgba(52,211,153,0.15);color:var(--ch4)">📝</div>
+    <div>
+      <h2>الاختبارات التفاعلية</h2>
+      <p>اختبر فهمك بأسئلة متعددة الخيارات مع تصحيح فوري وشرح الإجابة</p>
+    </div>
+  </div>
+  <div class="quiz-header">
+    <select class="quiz-select" id="quizFilter" onchange="initQuiz()">
+      <option value="all">جميع الفصول (اختبار شامل)</option>
+      <option value="ch1">الفصل الأول</option>
+      <option value="ch2">الفصل الثاني</option>
+      <option value="ch3">الفصل الثالث</option>
+      <option value="ch4">الفصل الرابع</option>
+      <option value="ch5">الفصل الخامس</option>
+    </select>
+    <span class="quiz-counter" id="quizCounter">سؤال ١ من ١</span>
+    <button class="fc-btn" onclick="initQuiz()">🔄 إعادة التشغيل</button>
+  </div>
+  <div class="quiz-progress-bar"><div class="quiz-progress-fill" id="quizProgress" style="width:0%"></div></div>
+  <div id="quizContainer"></div>
+  <div class="quiz-result" id="quizResult">
+    <div class="score" id="quizScore"></div>
+    <p id="quizFeedback"></p>
+    <button class="fc-btn primary" onclick="initQuiz()">أعد الاختبار</button>
+  </div>
+</div>
+
+</main>
+
+<script>
+// ===== DATA =====
+const GLOSSARY = [
+  {term:'ريادة الأعمال',en:'Entrepreneurship',ch:'ch1',def:'منظومة متكاملة تبدأ بتحديد فكرة غير تقليدية ثم تحويلها إلى مشروع ريادي تجاري جديد أو تطوير مشروع قائم، قائمة على الإبداع والمخاطرة والمبادرة.'},
+  {term:'رائد الأعمال',en:'Entrepreneur',ch:'ch1',def:'الشخص الذي يتمتع بروح المبادرة وتحمل المخاطرة ولديه الرغبة والقدرة على تحويل الأفكار الريادية إلى مشاريع منتجة منافسة.'},
+  {term:'ثقافة ريادة الأعمال',en:'Entrepreneurship Culture',ch:'ch1',def:'مجموعة المعارف والقيم والاتجاهات والمهارات التي تدعم المبادرات الفردية والنشاط الريادي والتشغيل الذاتي والعمل الحر.'},
+  {term:'منظومة ريادة الأعمال',en:'Entrepreneurship Ecosystem',ch:'ch1',def:'بيئة ريادية متكاملة تستند على عمل جماعي منظم مترابط تمارسه أطراف متعددة وفق منهجية محفزة ميسرة لريادة الأعمال.'},
+  {term:'الاقتصاد الريادي',en:'Entrepreneurial Economy',ch:'ch1',def:'أحد التوجهات العالمية للتطور الاقتصادي باعتبار ريادة الأعمال محركاً للنمو الاقتصادي في عديد من الدول المتقدمة والنامية.'},
+  {term:'المبادأة',en:'Proactiveness',ch:'ch1',def:'الأسبقية في تنفيذ الأفكار والمشاريع قبل الآخرين.'},
+  {term:'العقلية الريادية',en:'Entrepreneurial Mindset',ch:'ch2',def:'حالة ذهنية محددة توجه السلوك البشري نحو أنشطة ونتائج ريادية. غالباً ما يتم جذب الأفراد ذوي العقلية الريادية إلى الفرص والابتكار وخلق قيمة جديدة.'},
+  {term:'عقلية النمو',en:'Growth Mindset',ch:'ch2',def:'الاعتقاد بأنه يمكن تطوير القدرات والذكاء من خلال الجهد والممارسة. تقابلها العقلية الثابتة التي تفترض أن المواهب والقدرات محددة.'},
+  {term:'العقلية الثابتة',en:'Fixed Mindset',ch:'ch2',def:'عقلية تفترض أن مواهبك وقدراتك محددة ولا يمكن تغييرها. (Carol Dweck, 2006).'},
+  {term:'التعليم الريادي',en:'Entrepreneurial Education',ch:'ch2',def:'تزويد الأفراد بالمهارات العقلية والتنظيمية اللازمة لتمكينهم من إقامة المشاريع الخاصة بهم في المستقبل. (Alexandria et al., 2014).'},
+  {term:'استراتيجية التعلم الذاتي',en:'Self-Learning Strategy',ch:'ch2',def:'استراتيجية تعليمية تقوم على قدرة الفرد على تعلم المعرفة ومهارات ريادة الأعمال باستقلالية وفق توجيه ذاتي.'},
+  {term:'المزيج التسويقي',en:'Marketing Mix / 4Ps',ch:'ch5',def:'أربعة عناصر رئيسية تمثل مكونات التسويق: المنتج (Product)، المكان (Place)، السعر (Price)، الترويج (Promotion).'},
+  {term:'التسويق المباشر',en:'Direct Marketing',ch:'ch5',def:'أسلوب تسويقي أصبح أحد الأدوات الاستراتيجية، يشمل: الطلب عبر البريد، التسويق الإلكتروني، التسويق عبر الهاتف المحمول.'},
+  {term:'الإيراد الكلي',en:'Total Revenue',ch:'ch5',def:'يساوي: سعر بيع الوحدة × عدد وحدات المنتج المباعة.'},
+  {term:'إجمالي الربح',en:'Gross Profit',ch:'ch5',def:'يساوي: الإيراد الكلي − التكاليف الكلية.'},
+  {term:'تكاليف البداية',en:'Startup Costs',ch:'ch5',def:'تكاليف تُنفق لمرة واحدة عند بداية المشروع، تسمى أيضاً تكاليف الاستثمار الأولي أو تكاليف الإنشاء والتأسيس.'},
+  {term:'تكاليف التشغيل',en:'Operating Costs',ch:'ch5',def:'التكاليف الضرورية لتشغيل المشروع باستمرار — الخدمات العامة، الرواتب، التأمين، الإيجار، الدعاية.'},
+  {term:'حاضنة الأعمال',en:'Business Incubator',ch:'ch5',def:'وحدة خدمية تهدف إلى تحويل الأفكار والابتكارات إلى مشروعات اقتصادية منتجة من خلال تقديم التأهيل والدعم المادي والمعنوي والاستضافة والإرشاد.'},
+  {term:'إدارة الأعمال',en:'Business Management',ch:'ch5',def:'عملية تنظيم وتنسيق الأعمال التجارية، تشمل إنتاج الآلات والمواد والتمويل والابتكار والتسويق والتحكم بمصادر الأعمال.'},
+  {term:'الامتياز التجاري',en:'Franchise',ch:'ch4',def:'نوع من التعاقد التجاري يمنح فيه صاحب العلامة التجارية (مانح الامتياز) حق استخدام علامته وأساليبه لشخص آخر (الممنوح) مقابل عقد وشروط محددة.'},
+  {term:'المؤسسة الفردية',en:'Sole Proprietorship',ch:'ch4',def:'المنشأة التي يملكها شخص واحد ويكون لصاحبها الهيمنة الكاملة على كامل عناصرها وهو المسؤول الأول عن الإدارة وعن نتائجها.'},
+  {term:'مصفوفة الأولويات',en:'Priority Matrix',ch:'ch4',def:'مصفوفة وضعها ستيفن كوفي تُساعد على تحديد الأولويات عبر تقسيم الأنشطة إلى أربعة مربعات: (مهم/عاجل، مهم/غير عاجل، غير مهم/عاجل، غير مهم/غير عاجل).'},
+  {term:'SMARTEC',en:'SMARTEC Goals',ch:'ch1',def:'مستوى من الأهداف يتجاوز الأهداف الذكية SMART — يسعى خلف الفرص ويتوجه للبحث عن أو إيجاد الفرص دون الالتفات للموارد المتاحة لإنشاء منشأة جديدة قائمة على الإبداع والابتكار.'},
+  {term:'المعرفة الهشة',en:'Fragile Knowledge',ch:'ch1',def:'معرفة سطحية وساذجة لا تستقر في ذهن الطالب ولا تتحول إلى تطبيق عملي — موجودة في المؤسسات التعليمية التقليدية.'},
+  {term:'المعرفة العميقة',en:'Deep Knowledge',ch:'ch1',def:'معرفة قائمة على الفهم العميق وتتحول إلى تطبيقات عملية خارج الفصل الدراسي — موجودة في المؤسسات التعليمية الذكية.'},
+  {term:'التمويل الجماعي',en:'Crowdfunding',ch:'ch5',def:'منصات لجمع الأموال من مجموعة واسعة من المستثمرين الصغار، تُقدَّم المساهمات بمقدار صغير من العديد من الأفراد.'},
+  {term:'رأس المال الاستثماري الاجتماعي',en:'Social Venture Capital',ch:'ch5',def:'استثمارات مالية تهدف إلى تحقيق العوائد المالية والاجتماعية في الوقت نفسه.'},
+];
+
+const FLASHCARDS = [
+  {ch:'ch1',q:'ما تعريف ريادة الأعمال وفق قاموس كمبريدج؟',a:'مجموعة من المهارات التي تُسهم في بدء عمل جديد، من خلال ربطه بقدرات المتعلمين لتحقيق فرص جديدة، خاصة عندما يتضمن ذلك رؤية جديدة.'},
+  {ch:'ch1',q:'ما الفرق بين ريادة الأعمال وثقافة ريادة الأعمال؟',a:'ريادة الأعمال: تشير إلى الفرد المتمتع بروح المبادرة. ثقافة ريادة الأعمال: تشير إلى المجموعة أو المجتمع حين تنتشر هذه الصفات لدى مجموعة من الأشخاص في مكان معين.'},
+  {ch:'ch1',q:'ما أضلاع المثلث الريادي الثلاثة المتلازمة؟',a:'الإدارة + القيادة + الريادة — هي أضلاع ثلاثة متلازمة لتحقيق كفاءة وفعالية الأداء في المشروع الريادي الناجح.'},
+  {ch:'ch1',q:'ما سمات اتخاذ القرار في منظومة ريادة الأعمال الخمس؟',a:'المبادأة (الاستباقية)، المشاركة (التفاعلية)، التكامل (النظرة الكلية)، الهادفية (المنافع الملموسة)، الالتزام (تحديد المهام والمسؤوليات).'},
+  {ch:'ch1',q:'ما نسبة مساهمة مشاريع ريادة الأعمال في الاقتصاد العالمي؟',a:'٩٠٪ من المشروعات الاقتصادية على مستوى العالم. (محسن، ٢٠٢٣)'},
+  {ch:'ch1',q:'ما الفرق بين المعرفة الهشة والمعرفة العميقة؟',a:'المعرفة الهشة: سطحية لا تستقر في الذهن ولا تتحول لتطبيق. المعرفة العميقة: قائمة على الفهم وتتحول لتطبيقات عملية خارج الفصل.'},
+  {ch:'ch2',q:'ما تعريف العقلية الريادية وفق Ferrero & Fioro (2014)؟',a:'تدور حول تحليل العالم وفرصه وإمكانياته، وفهم كيف يمكن للفرد المساهمة في بناء وتطور النظام الاقتصادي والاجتماعي، وتحويل الأفكار في العمل لتحقيق الأهداف.'},
+  {ch:'ch2',q:'ما السمات السبع للعقلية الريادية وفق Daviset et al. (2015)؟',a:'الاستقلالية، التفضيل للهيكل المحدود، عدم المطابقة، قبول المخاطر، التوجه الإجرائي، الشغف، الحاجة إلى التحقق.'},
+  {ch:'ch2',q:'ما المهارات السبع للعقلية الريادية وفق Daviset et al.؟',a:'التركيز المستقبلي، توليد الأفكار، التنفيذ، الثقة بالنفس، التفاؤل، المثابرة، حساسية الشخصية.'},
+  {ch:'ch2',q:'ما فئات مهارات التعليم الريادي السبع (ماهر الحشوة، ٢٠١٢)؟',a:'الفئة ١: مهارات التخطيط والإدارة والتسويق. ٢: الإبداع والابتكار. ٣: المهارات الاجتماعية. ٤: السلوك الريادي. ٥: التفكير العليا. ٦: المعتقدات حول الذات. ٧: القراءة والكتابة والحساب.'},
+  {ch:'ch2',q:'ما المفاهيم الخاطئة الستة حول عقلية ريادة الأعمال؟',a:'١) المجازفة تهور. ٢) رواد الأعمال يولدون ولا يُصنعون. ٣) يحفزهم المال فقط. ٤) يعملون بمفردهم. ٥) يركزون دائماً على الفكرة الكبيرة التالية. ٦) الفشل هو نهاية الطريق.'},
+  {ch:'ch3',q:'ما الأخطاء الشائعة في التوجه نحو ريادة الأعمال؟',a:'التكاسل عن تنفيذ الفكرة، الاستهزاء بها، التركيز على الفرد دون المنظومة، مقارنة الإدارة والقيادة والريادة كبدائل لبعضها بدلاً من كونها أضلاعاً متلازمة.'},
+  {ch:'ch3',q:'ما متطلبات تحفيز رائدات الأعمال الست؟',a:'١)بيئة ثقافية داعمة، ٢)برامج نوعية، ٣)تحديد قطاعات ملائمة، ٤)فريق مرشدات، ٥)توعية باستراتيجيات ملائمة، ٦)رصيد معرفي من تجارب رائدات ناجحات.'},
+  {ch:'ch4',q:'ما الخيارات الأربعة لبدء المشروع الريادي؟',a:'١)البدء بمشروع جديد، ٢)شراء مشروع قائم، ٣)الامتياز التجاري، ٤)العمل من المنزل.'},
+  {ch:'ch4',q:'ما الفرق بين المؤسسة الفردية والشركة كشكلين قانونيين؟',a:'المؤسسة الفردية: يملكها شخص واحد، سهلة التأسيس، حرية أكبر، لكن المخاطر كلها عليه. الشركة: يملكها أكثر من شخص، تقسيم المسؤوليات والمخاطر، وجود مجلس إدارة، لكن أصعب تأسيساً.'},
+  {ch:'ch4',q:'ما مصفوفة الأولويات وما مربعاتها الأربعة؟',a:'مصفوفة ستيفن كوفي: ١)مهم وعاجل (أفعل فوراً)، ٢)مهم وغير عاجل (خطط له)، ٣)غير مهم وعاجل (تعامل بحذر)، ٤)غير مهم وغير عاجل (تجنبه/قلل منه).'},
+  {ch:'ch5',q:'ما تعريف التسويق؟',a:'إتاحة المنتج المناسب، بالكمية المناسبة، في المكان المناسب، وفي الوقت المناسب، وتحقيق أرباح من ذلك.'},
+  {ch:'ch5',q:'ما عناصر المزيج التسويقي 4Ps؟',a:'Product (المنتج)، Place (المكان/التوزيع)، Price (السعر)، Promotion (الترويج).'},
+  {ch:'ch5',q:'ما معايير تسعير المنتج الثلاثة؟',a:'١)بحسب التكلفة: التكاليف الفعلية + قيمة ربح. ٢)بحسب سعر المنافسين. ٣)بحسب السوق: السعر الذي يستطيع العملاء دفعه.'},
+  {ch:'ch5',q:'ما حاضنة الأعمال وما أنشطتها الرئيسية؟',a:'وحدة خدمية لتحويل الأفكار لمشروعات منتجة. أنشطتها: مكان مزود بالمعدات، استشارات مهنية وإدارية وتقنية، تنشأ في الجامعات، تُنتج مجتمعاً تداخلياً من رواد الأعمال والأكاديميين.'},
+  {ch:'ch5',q:'ما التحديات الشخصية التي يواجهها رائد الأعمال؟',a:'عدم استقرار الدخل، المخاطرة (خسارة الاستثمار)، ساعات العمل الطويلة، ارتباطات عائلية أقل، ضغط العمل، المسؤولية الكاملة، الإحباط من تأخر النتائج.'},
+];
+
+const QUIZ_DATA = [
+  // Chapter 1
+  {ch:'ch1',q:'ما هي نسبة مساهمة مشاريع ريادة الأعمال في المشروعات الاقتصادية على مستوى العالم وفق دراسة محسن 2023؟',opts:['%٧٠','%٨٠','%٩٠','%٦٠'],correct:2,exp:'أشارت دراسة محسن (٢٠٢٣) إلى أن مشاريع ريادة الأعمال تسهم بنسبة ٩٠٪ من المشروعات الاقتصادية على مستوى العالم.'},
+  {ch:'ch1',q:'ما المصدر الذي يعرّف ريادة الأعمال بأنها "النشاط الذي يعمل على إيجاد خدمات وبضائع جديدة تؤثر في السوق وتنتج أموالاً وأرباحاً"؟',opts:['قاموس كمبريدج','مرجع أوكسفورد','بكري (2018)','مارتينيز (2015)'],correct:1,exp:'مرجع أوكسفورد (Oxford Reference) يعرّف ريادة الأعمال بأنها النشاط الذي يعمل على إيجاد خدمات وبضائع جديدة تؤثر في السوق وتنتج أموالاً وأرباحاً.'},
+  {ch:'ch1',q:'أي مما يلي يُعدّ خطأً شائعاً في مجال ريادة الأعمال وفق المقرر؟',opts:['الاستهزاء بالأفكار غير التقليدية','دراسة الفكرة الريادية بعناية','تأسيس فرق عمل قوية','البحث عن فرص السوق'],correct:0,exp:'يؤكد المتخصصون في ريادة الأعمال على أنه من الخطأ أن تسخر أو تستهزئ بفكرة ما، لأن كثيراً من الأفكار التي استُهزئ بها تحولت لمشاريع ريادية ناجحة.'},
+  {ch:'ch1',q:'الجامعة الذكية هي مؤسسة تعليمية تستخدم المعرفة:',opts:['الهشة السطحية','العميقة القائمة على الفهم','الموروثة التقليدية','النظرية البحتة'],correct:1,exp:'المؤسسات التعليمية الذكية تكون موجهة بالمعرفة العميقة عند صياغة خططها وبرامجها لبناء الفكر الإبداعي الابتكاري والسلوك الريادي لدى الطالب.'},
+  {ch:'ch1',q:'ما معدل البطالة في الدول العربية في فئة الشباب (15-24) وفق التقرير الاقتصادي العربي الموحد 2020؟',opts:['%١٥','%١٨','%٢٠','%٢٣.٣'],correct:3,exp:'أشار التقرير الاقتصادي العربي الموحد (2020) الصادر عن صندوق النقد العربي إلى أن معدل البطالة في الدول العربية هو الأعلى في العالم للشباب (15-24) بنسبة 23.3٪.'},
+  {ch:'ch1',q:'ما الأضلاع الثلاثة المتلازمة لتحقيق كفاءة وفعالية الأداء في المشروع الريادي؟',opts:['الإدارة والمحاسبة والتسويق','الإدارة والقيادة والريادة','الابتكار والتمويل والتسويق','الإنتاج والتوزيع والتسويق'],correct:1,exp:'التحليل العملي والممارسة العملية يؤكدان على أن الإدارة والقيادة والريادة هي أضلاع ثلاثة متلازمة لتحقيق كفاءة وفعالية الأداء في المشروع الريادي الناجح.'},
+  {ch:'ch1',q:'ما سمة اتخاذ القرار التي تعني "النظرة الكلية الشاملة لكافة العناصر والأطراف"؟',opts:['المبادأة','المشاركة','التكامل','الهادفية'],correct:2,exp:'التكامل: تتسم عملية اتخاذ القرارات بالنظرة الكلية الشاملة لكافة العناصر والأطراف.'},
+  {ch:'ch1',q:'من هو الذي أشار إلى أن رواد الأعمال هم من يسعون خلف الفرص دون الالتفات للموارد المتاحة؟',opts:['بكري (2018)','مارتينيز (2015)','نافع (2018)','SMARTEC مفهوم'],correct:3,exp:'من الأفكار الرائدة في مفهوم SMARTEC أن "رواد الأعمال يسعون خلف الفرص ويتوجهون للبحث عن أو إيجاد الفرص دون الالتفاف للموارد المتاحة لإنشاء منشأة جديدة قائمة على الإبداع والابتكار".'},
+  {ch:'ch1',q:'ما المقصود بالمبادأة في مبادئ ريادة الأعمال؟',opts:['الجرأة','الأسبقية','الجديد','التطوير'],correct:1,exp:'المبادأة تعني الأسبقية — أي أن يكون رائد الأعمال سبّاقاً في تنفيذ أفكاره قبل غيره.'},
+  {ch:'ch1',q:'ما مفهوم "الجامعة الرائدة"؟',opts:['جامعة تُكثر من الأبحاث النظرية','جامعة تُحفز الإبداع وتنمي القدرة على الابتكار وتتعاون مع بيئة الأعمال','جامعة تقتصر على تدريس مقررات التكنولوجيا','جامعة تُنتج أكبر عدد من الخريجين'],correct:1,exp:'مع تزايد الاهتمام بثقافة ومهارات ريادة الأعمال، أصبح مفهوم الجامعة الرائدة من المفاهيم الواضحة في مجال التعليم، تأكيداً على مسؤولية ودور الجامعات في تحفيز الإبداع وتنمية الرغبة والقدرة على الابتكار.'},
+  // Chapter 2
+  {ch:'ch2',q:'من صاغت مفهوم "العقلية الثابتة" و"عقلية النمو"؟',opts:['Thum (2012)','Carol Dweck (2006)','McGrath & MacMillan (2000)','Ferrero & Fioro (2014)'],correct:1,exp:'بينت Carol Dweck (2006) في كتابها "عقلية التفكير" أن العقلية يمكن أن تكون ثابتة (مواهبك محددة) أو موجهة نحو النمو (يمكن تطويرها).'},
+  {ch:'ch2',q:'ما الخاصية التي تعني "الرغبة في العمل بدرجة عالية من الاستقلالية" في سمات العقلية الريادية؟',opts:['الشغف','التوجه الإجرائي','الاستقلالية','عدم المطابقة'],correct:2,exp:'الاستقلالية: الرغبة في العمل بدرجة عالية من الاستقلالية، أشعر بعدم الراحة عندما يُتوقع مني اتباع قواعد الآخرين.'},
+  {ch:'ch2',q:'ما أول خاصية من خصائص العقلية الريادية المشتركة وفق McGrath & MacMillan (2000)؟',opts:['يشاركون طاقات الجميع في مجالهم','يبحثون بحماس عن فرص جديدة','يركزون على التنفيذ التكيفي','يتابعون الفرص مع الانضباط الهائل'],correct:1,exp:'أول خاصية وفق McGrath & MacMillan: يبحثون بحماس عن فرص جديدة.'},
+  {ch:'ch2',q:'وفق ماهر الحشوة (2012)، الفئة الأولى من مهارات التعليم الريادي تتضمن:',opts:['الاتصال والإقناع والتفاوض','حل المشكلات والتفكير الناقد','التخطيط والتفكير الاستراتيجي والقيادة والتسويق','معرفة الذات والثقة بالنفس'],correct:2,exp:'الفئة الأولى: وهي فئة المهارات التي تنمي ريادة الأعمال، مثل: التخطيط والتفكير الاستراتيجي، القيادة والإدارة، التسويق.'},
+  {ch:'ch2',q:'ما المفهوم الخاطئ الذي يقول أن رواد الأعمال يولدون بصفات ومهارات معينة؟',opts:['المجازفة تهور','رواد الأعمال يولدون ولا يُصنعون','يحفزهم المال فقط','يعملون بمفردهم'],correct:1,exp:'هناك اعتقاد خاطئ أن رواد الأعمال يولدون بالفطرة بصفات ومهارات معينة. في الواقع، ريادة الأعمال هي مهارة يمكن تطويرها وتعلمها مع العقلية الصحيحة والتصميم.'},
+  {ch:'ch2',q:'تعريف اليونسكو ويونيفوك الدولي (2010) للتعليم الريادي هو:',opts:['تزويد الأفراد بالمهارات العقلية والتنظيمية فقط','خلق عقلية وثقافة الريادة والابتكار وحل المشاكل وترسيخ الثقة بالنفس','إعداد الطلبة واكسابهم اتجاهات ومهارات العمل الريادي المنظم','تدريب الطلاب على بناء خطط العمل التجارية'],correct:1,exp:'عرّفت اليونسكو ويونيفوك (2010) التعليم الريادي بأنه: "خلق عقلية وثقافة الريادة والابتكار وحل المشاكل وترسيخ الثقة بالنفس لدى الأفراد في قدرتهم على النجاح فيما اختاروا".'},
+  {ch:'ch2',q:'ما مهارة القدرة على الارتداد بسرعة من خيبة الأمل والبقاء مثابراً في مواجهة النكسات؟',opts:['التفاؤل','الثقة بالنفس','المثابرة','التركيز المستقبلي'],correct:2,exp:'المثابرة: القدرة على الارتداد بسرعة من خيبة الأمل والبقاء مثابراً في مواجهة النكسات — "لا أستسلم بسهولة".'},
+  {ch:'ch2',q:'ثلاثة مجالات لتطوير العقلية الريادية وفق مارك هوبكنز في كتابه "Shortcut to Prosperity" هي:',opts:['التخطيط والتمويل والتسويق','تجنيد الحلفاء، تطوير ميزة غير عادلة، ابحث عن مجال تنافس','الإبداع والابتكار وحل المشكلات','التواصل والتعلم المستمر وبناء الشبكات'],correct:1,exp:'وفق مارك هوبكنز (Shortcut to Prosperity, 2013): تطوير العقلية الريادية يتطلب تطوير ثلاثة مجالات للتركيز: ١) تجنيد الحلفاء، ٢) تطوير ميزة غير عادلة، ٣) ابحث عن مجال تنافس.'},
+  {ch:'ch2',q:'ما تعريف ثقافة ريادة الأعمال؟',opts:['الاتجاه الفردي نحو تأسيس أعمال جديدة','مجموعة المعارف والقيم والاتجاهات والمهارات التي تدعم المبادرات الفردية والنشاط الريادي','ثقافة الشركات الكبرى في إدارة الأعمال','نظام تعليمي متخصص في ريادة الأعمال'],correct:1,exp:'تُعرَّف ثقافة ريادة الأعمال بأنها: "مجموعة المعارف والقيم والاتجاهات والمهارات التي تدعم المبادرات الفردية والنشاط الريادي والتشغيل الذاتي والعمل الحر، وتشجع على تملك المشروعات وإدارتها."'},
+  {ch:'ch2',q:'أي مما يلي يُعدّ من استراتيجيات تنمية عقلية ريادة الأعمال؟',opts:['الاعتماد على الخبراء وحدهم','تقبل الفشل كفرصة للتعلم','تجنب المخاطر بشكل كامل','العمل بمعزل عن الآخرين'],correct:1,exp:'تقبل الفشل كفرصة للتعلم من أهم استراتيجيات تنمية عقلية ريادة الأعمال — تحليل حالات الفشل واستخراج الدروس المستفادة.'},
+  // Chapter 3
+  {ch:'ch3',q:'ما التوجه الخاص بـ SMARTEC الذي يميز رائد الأعمال عن غيره؟',opts:['البحث عن الوظيفة الحكومية المضمونة','السعي خلف الفرص دون الالتفاف للموارد المتاحة','التركيز على الربح السريع فقط','الاكتفاء بالأهداف الذكية SMART'],correct:1,exp:'من الأفكار الرائدة: رواد الأعمال يسعون خلف الفرص ويتوجهون للبحث عن أو إيجاد الفرص دون الالتفاف للموارد المتاحة لإنشاء منشأة جديدة قائمة على الإبداع والابتكار.'},
+  {ch:'ch3',q:'ما أول متطلبات تحفيز رائدات الأعمال للدخول في مجال ريادة الأعمال؟',opts:['بناء فريق مرشدات','تهيئة بيئة ثقافية اجتماعية داعمة','توفير الدعم المالي المباشر','تحديد القطاعات الملائمة'],correct:1,exp:'أول الاعتبارات الأساسية لتعزيز ريادة الأعمال للقطاع النسائي: تهيئة بيئة ثقافية اجتماعية داعمة لبناء توجه إيجابي تجاه رائدات الأعمال.'},
+  {ch:'ch3',q:'ما الذي تؤكده التجارب العملية بخصوص الأفكار الريادية؟',opts:['الفكرة الريادية دائماً حكر على صاحبها','نفس الفكرة عادة ما تكون في ذهن العشرات، لكن المهم من يسبق بتنفيذها','الأفكار الأصيلة ملكية خاصة','تنفيذ الفكرة يحتاج دائماً لرأس مال كبير'],correct:1,exp:'تؤكد التجارب العملية أن نفس الفكرة عادة ما تكون في ذهن العشرات من الأفراد، لكن المهم من يسبق بتنفيذها.'},
+  {ch:'ch3',q:'ما الوصف الدقيق لرائد الأعمال الناجح؟',opts:['عبقري خارق يملك أفكاراً لا يمتلكها أحد','طموح لديه أفكار ريادية لها مبرراتها واقعياً ومبادر لإنشاء وإدارة عمل تجاري ريادي ناجح','مدير تقليدي يتبع الأساليب الموروثة','شخص يتجنب المخاطرة ويبحث عن الأمان'],correct:1,exp:'ليسوا عباقرة ولكنهم طموحون لديهم أفكار ريادية لها مبرراتها واقعياً ومبادرون إلى إنشاء وإدارة عمل تجاري ريادي ناجح.'},
+  {ch:'ch3',q:'ما المقصود بـ "مبادأة" رائد الأعمال؟',opts:['الانتظار حتى تنضج الظروف','الأسبقية في تنفيذ الأفكار قبل غيره','الشجاعة في مواجهة الفشل','الاستقلالية في العمل'],correct:1,exp:'المبادأة تعني الأسبقية — أن يكون رائد الأعمال من المضروري أن يكون لديه المبادأة لتوليد الفكرة الريادية أو التقاطها ثم التعجيل بدراستها وتقييمها وبدء تنفيذها.'},
+  // Chapter 4
+  {ch:'ch4',q:'ما نقطة القوة الرئيسية في البدء بمشروع جديد كخيار لبدء العمل الريادي؟',opts:['وجود عملاء وسوق جاهزة','وجود فرصة لإعداد دراسة تفصيلية متكاملة ومرونة في التخطيط','عدم الحاجة لإجراءات ترخيص','الاستفادة من سمعة المشروع'],correct:1,exp:'نقطة القوة في البدء بمشروع جديد: وجود فرصة لإعداد دراسة تفصيلية متكاملة عن المشروع وتحديد جدواه ومدى نجاحه قبل بدء التنفيذ، والمرونة في التخطيط.'},
+  {ch:'ch4',q:'ما نقطة الضعف الرئيسية في الامتياز التجاري؟',opts:['ضعف العلامة التجارية','التقيد بشروط وتعليمات مانح الامتياز ودفع قيمة الامتياز من المبيعات','صعوبة الحصول على تمويل','غياب الدعم التدريبي'],correct:1,exp:'التقيد بشروط وتعليمات مانح الامتياز، ودفع قيمة الامتياز (التعاقد) من المبيعات مما يقلل الأرباح.'},
+  {ch:'ch4',q:'في مصفوفة الأولويات، ما المربع الذي يجب التعامل معه أولاً؟',opts:['مهم وغير عاجل','غير مهم وعاجل','مهم وعاجل','غير مهم وغير عاجل'],correct:2,exp:'المربع الأول (مهم وعاجل): وهي أمور مهمة من الناحية العملية ومستعجلة من الناحية الزمنية — يجب التعامل معها فوراً.'},
+  {ch:'ch4',q:'ما حق الزبون الثالث وفق حقوقه المعتمدة عالمياً؟',opts:['الحصول على المعلومات الصحيحة','حرية الاختيار','استبدال السلعة أو استرجاع ثمنها إذا كان بها عيب','إمكانية الشكوى والاقتراح'],correct:2,exp:'الحق الثالث: السماح باستبدال السلعة بأخرى جديدة أو إعادتها مع استرجاع ثمنها إذا كان بها عيب أو نقص.'},
+  {ch:'ch4',q:'في الشركة كشكل قانوني، ما الذي يميزها عن المؤسسة الفردية؟',opts:['يملكها شخص واحد','شخص معنوي له وجود قانوني مستقل عن شخصيات الشركاء','إجراءات تأسيسها أسهل','لا يوجد مجلس إدارة'],correct:1,exp:'الشركة شخص معنوي له وجود قانوني مستقل عن شخصيات الشركاء — هذا ما يميزها عن المؤسسة الفردية.'},
+  // Chapter 5
+  {ch:'ch5',q:'ما تعريف التوزيع في عناصر المزيج التسويقي؟',opts:['عملية الترويج للمنتج بين العملاء','المهمة التي يتم من خلالها نقل السلع والخدمات من مصادر إنتاجها إلى المستهلك','تحديد سعر المنتج في السوق','تطوير مواصفات المنتج'],correct:1,exp:'التوزيع: هو المهمة التي من خلالها يتم نقل السلع والخدمات من مصادر إنتاجها إلى المستهلك.'},
+  {ch:'ch5',q:'ما معادلة إجمالي الربح في المشروع الريادي؟',opts:['الإيراد الكلي + التكاليف الكلية','سعر بيع الوحدة × عدد الوحدات المباعة','الإيراد الكلي − التكاليف الكلية','التكاليف الثابتة − التكاليف المتغيرة'],correct:2,exp:'إجمالي الربح = الإيراد الكلي − التكاليف الكلية.'},
+  {ch:'ch5',q:'ما مصدر التمويل الثاني الذي يلجأ إليه رائد الأعمال المبتدئ عادةً بعد المدخرات الشخصية؟',opts:['القروض البنكية','التمويل الحكومي','الأسرة وجماعة الرفاق','رأس المال المخاطر'],correct:2,exp:'الأسرة وجماعة الرفاق: وهذا في الغالب يكون ثاني مصدر للتمويل يرد إلى ذهن رائد الأعمال المبتدئ والصغير.'},
+  {ch:'ch5',q:'ما التحدي الذي يُعرِّف بأنه "ضريبة الفشل في المشروعات الصغيرة منخفضة جداً مقارنة بالمشروعات الكبيرة"؟',opts:['ساعات العمل الطويلة','عدم استقرار الدخل','المخاطرة (خسارة الاستثمار بأكمله)','المسؤولية الكاملة'],correct:2,exp:'تحدي المخاطرة (خسارة الاستثمار بأكمله): إن ضريبة الفشل في المشروعات الصغيرة منخفضة جداً مقارنة بالمشروعات الكبيرة.'},
+  {ch:'ch5',q:'حاضنات الأعمال عادة تنشأ في:',opts:['المناطق الصناعية فقط','الجامعات التي توفر كفاءات عالية التخصص','المدن الكبرى فحسب','مراكز التسوق والأسواق التجارية'],correct:1,exp:'عادة تنشأ الحاضنات في الجامعات التي يمكن أن توفر اتصالاً إضافياً بكفاءات عالية التخصص وتسهيلات حوسبة واختيارات بين منظومة التخصصات.'},
+  {ch:'ch5',q:'ما مميزات دراسة إدارة الأعمال الأربعة المذكورة في المقرر؟',opts:['توفر فرص عمل، نطاق واسع من المجالات، اكتساب المهارات المطلوبة، إتقان مهارات القيادة','التخصص الدقيق، الراتب المرتفع، المكانة الاجتماعية، الاستقرار الوظيفي','الترقية السريعة، المرونة، التوازن، العمل من المنزل','المعرفة الأكاديمية، البحث العلمي، النشر، التدريس'],correct:0,exp:'مميزات دراسة إدارة الأعمال الأربعة: ١) توفر فرص عمل، ٢) نطاق واسع من المجالات الوظيفية، ٣) اكتساب المهارات المطلوبة لسوق العمل، ٤) إتقان مهارات القيادة.'},
+];
+
+// ===== STATE =====
+let currentSection = 'home';
+let completedSections = JSON.parse(localStorage.getItem('riadaCompleted') || '[]');
+let fcIndex = 0, fcCards = [], fcFlipped = false;
+let quizCards = [], quizIndex = 0, quizScore = 0, quizAnswered = false;
+let darkMode = false;
+
+// ===== INIT =====
+window.onload = () => {
+  renderGlossary(GLOSSARY);
+  initFlashcards();
+  initQuiz();
+  updateProgress();
+  // close search on outside click
+  document.addEventListener('click', e => {
+    if(!e.target.closest('.topbar-search')) {
+      document.getElementById('searchResults').classList.remove('show');
+    }
+  });
+};
+
+// ===== NAVIGATION =====
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById('section-' + id).classList.add('active');
+  // nav links
+  document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+  const links = document.querySelectorAll('.nav-link');
+  links.forEach(l => {
+    if(l.getAttribute('onclick') && l.getAttribute('onclick').includes("'" + id + "'")) {
+      l.classList.add('active');
+    }
+  });
+  // title
+  const titles = {home:'لوحة التحكم',ch1:'الفصل الأول',ch2:'الفصل الثاني',ch3:'الفصل الثالث',ch4:'الفصل الرابع',ch5:'الفصل الخامس',glossary:'المعجم المصطلحي',flashcards:'البطاقات التعليمية',quizzes:'الاختبارات'};
+  document.getElementById('topbarTitle').textContent = titles[id] || '';
+  currentSection = id;
+  window.scrollTo({top:0, behavior:'smooth'});
+  // mark visited
+  if(['ch1','ch2','ch3','ch4','ch5'].includes(id) && !completedSections.includes(id)) {
+    completedSections.push(id);
+    localStorage.setItem('riadaCompleted', JSON.stringify(completedSections));
+    updateProgress();
+  }
+}
+
+function toggleSidebar() {
+  const sb = document.getElementById('sidebar');
+  const main = document.getElementById('main');
+  const top = document.getElementById('topbar');
+  sb.classList.toggle('collapsed');
+  if(sb.classList.contains('collapsed')) {
+    main.classList.add('full');
+    top.classList.add('full');
+  } else {
+    main.classList.remove('full');
+    top.classList.remove('full');
+  }
+}
+
+function toggleDark() {
+  darkMode = !darkMode;
+  document.body.classList.toggle('light-mode', !darkMode);
+  document.getElementById('themeBtn').textContent = darkMode ? '🌙' : '☀️';
+}
+
+function updateProgress() {
+  const total = 5;
+  const done = completedSections.filter(s => ['ch1','ch2','ch3','ch4','ch5'].includes(s)).length;
+  const pct = (done/total)*100;
+  document.getElementById('globalProgress').style.width = pct + '%';
+  document.getElementById('progressLabel').textContent = done + ' من ' + total + ' فصول مكتملة';
+  // per chapter
+  ['ch1','ch2','ch3','ch4','ch5'].forEach((ch,i) => {
+    const el = document.getElementById('p'+(i+1));
+    if(el) el.style.width = completedSections.includes(ch) ? '100%' : '0%';
+    const link = document.querySelector(`.nav-link[onclick*="'${ch}'"]`);
+    if(link) link.classList.toggle('done', completedSections.includes(ch));
+  });
+}
+
+// ===== TABS =====
+function switchTab(btn, id) {
+  const container = btn.closest('.tabs').parentElement;
+  container.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  container.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(id).classList.add('active');
+}
+
+// ===== ACCORDION =====
+function toggleAcc(header) {
+  const body = header.nextElementSibling;
+  header.classList.toggle('open');
+  body.classList.toggle('open');
+}
+
+// ===== SEARCH =====
+const SEARCH_INDEX = [
+  {title:'الفصل الأول: مفهوم ريادة الأعمال',section:'ch1',text:'مفهوم ريادة الأعمال تعريف قاموس كمبريدج أوكسفورد بكري مارتينيز ليندر الريادة في اللغة'},
+  {title:'الفصل الأول: دور رواد الأعمال',section:'ch1',text:'دور رواد الأعمال رائدات الأعمال المساهمات فرص عمل جديدة أسواق جديدة'},
+  {title:'الفصل الأول: منظومة ريادة الأعمال',section:'ch1',text:'منظومة ريادة الأعمال الإدارة القيادة الريادة أضلاع متلازمة'},
+  {title:'الفصل الأول: المؤسسات التعليمية',section:'ch1',text:'الجامعات المؤسسات التعليمية المعرفة الهشة المعرفة العميقة الجامعة الذكية'},
+  {title:'الفصل الثاني: العقلية الريادية',section:'ch2',text:'العقلية الريادية Entrepreneurial Mindset Dweck عقلية النمو العقلية الثابتة'},
+  {title:'الفصل الثاني: سمات ومهارات العقلية الريادية',section:'ch2',text:'السمات المهارات الاستقلالية قبول المخاطر الشغف المثابرة التفاؤل التنفيذ توليد الأفكار'},
+  {title:'الفصل الثاني: التعليم الريادي وثقافة ريادة الأعمال',section:'ch2',text:'التعليم الريادي ثقافة ريادة الأعمال مهارات التعليم الريادي ماهر الحشوة'},
+  {title:'الفصل الثالث: خصائص رائد الأعمال',section:'ch3',text:'خصائص رائد الأعمال توجهاته دراسة الجدوى فرق العمل الأخطاء الشائعة'},
+  {title:'الفصل الرابع: خيارات بدء المشروع',section:'ch4',text:'مشروع جديد شراء مشروع قائم امتياز تجاري عمل من المنزل'},
+  {title:'الفصل الرابع: الأشكال القانونية للمنشآت',section:'ch4',text:'المؤسسة الفردية الشركة الشكل القانوني نقاط القوة الضعف'},
+  {title:'الفصل الرابع: التوازن بين المشروع والدراسة',section:'ch4',text:'التوازن الدراسة مصفوفة الأولويات كوفي حقوق الزبون'},
+  {title:'الفصل الخامس: التسويق والمزيج التسويقي',section:'ch5',text:'التسويق المزيج التسويقي 4Ps المنتج السعر المكان الترويج'},
+  {title:'الفصل الخامس: الموارد المالية',section:'ch5',text:'مصادر التمويل القروض التمويل الحكومي حاضنات الأعمال التمويل الجماعي'},
+  {title:'الفصل الخامس: إدارة الأعمال',section:'ch5',text:'إدارة الأعمال Business Management تخصصات إدارة الأعمال مميزات'},
+  {title:'المعجم المصطلحي',section:'glossary',text:'مصطلحات تعريفات ريادة الأعمال'},
+  {title:'البطاقات التعليمية',section:'flashcards',text:'بطاقات تعليمية مراجعة'},
+  {title:'الاختبارات',section:'quizzes',text:'اختبارات أسئلة تقييم'},
+];
+
+function doSearch(val) {
+  const res = document.getElementById('searchResults');
+  if(!val.trim()) { res.classList.remove('show'); return; }
+  const matches = SEARCH_INDEX.filter(item => item.text.includes(val) || item.title.includes(val));
+  if(matches.length === 0) { res.classList.remove('show'); return; }
+  res.innerHTML = matches.slice(0,8).map(m => `<div class="search-result-item" onclick="showSection('${m.section}');document.getElementById('searchInput').value='';document.getElementById('searchResults').classList.remove('show');"><strong>${m.section}</strong>${m.title}</div>`).join('');
+  res.classList.add('show');
+}
+
+// ===== GLOSSARY =====
+function renderGlossary(items) {
+  document.getElementById('glossaryList').innerHTML = items.map(g => `
+    <div class="glossary-item">
+      <span class="tag">${{ch1:'الفصل الأول',ch2:'الفصل الثاني',ch3:'الفصل الثالث',ch4:'الفصل الرابع',ch5:'الفصل الخامس'}[g.ch]||g.ch}</span>
+      <h4>${g.term} ${g.en?`<span style="font-size:0.7rem;color:var(--text2);font-weight:400">(${g.en})</span>`:''}</h4>
+      <p>${g.def}</p>
+    </div>`).join('');
+}
+function filterGlossary(val) {
+  if(!val.trim()) { renderGlossary(GLOSSARY); return; }
+  renderGlossary(GLOSSARY.filter(g => g.term.includes(val) || g.def.includes(val) || (g.en && g.en.toLowerCase().includes(val.toLowerCase()))));
+}
+
+// ===== FLASHCARDS =====
+function initFlashcards() {
+  const filter = document.getElementById('fcFilter').value;
+  fcCards = filter === 'all' ? [...FLASHCARDS] : FLASHCARDS.filter(f => f.ch === filter);
+  fcIndex = 0; fcFlipped = false;
+  showCard();
+}
+function showCard() {
+  if(!fcCards.length) return;
+  const card = fcCards[fcIndex];
+  document.getElementById('fcQuestion').textContent = card.q;
+  document.getElementById('fcAnswer').textContent = card.a;
+  document.getElementById('flashcard').classList.remove('flipped');
+  fcFlipped = false;
+  document.getElementById('fcCounter').textContent = `بطاقة ${fcIndex+1} من ${fcCards.length}`;
+}
+function flipCard() {
+  fcFlipped = !fcFlipped;
+  document.getElementById('flashcard').classList.toggle('flipped', fcFlipped);
+}
+function nextCard() {
+  fcIndex = (fcIndex + 1) % fcCards.length;
+  showCard();
+}
+function prevCard() {
+  fcIndex = (fcIndex - 1 + fcCards.length) % fcCards.length;
+  showCard();
+}
+
+// ===== QUIZZES =====
+function initQuiz() {
+  const filter = document.getElementById('quizFilter').value;
+  let pool = filter === 'all' ? [...QUIZ_DATA] : QUIZ_DATA.filter(q => q.ch === filter);
+  // shuffle
+  pool = pool.sort(() => Math.random() - 0.5);
+  quizCards = pool;
+  quizIndex = 0; quizScore = 0;
+  document.getElementById('quizResult').classList.remove('show');
+  renderQuizQuestion();
+}
+function renderQuizQuestion() {
+  if(quizIndex >= quizCards.length) { showQuizResult(); return; }
+  const q = quizCards[quizIndex];
+  const pct = (quizIndex / quizCards.length) * 100;
+  document.getElementById('quizProgress').style.width = pct + '%';
+  document.getElementById('quizCounter').textContent = `سؤال ${quizIndex+1} من ${quizCards.length}`;
+  const letters = ['أ','ب','ج','د'];
+  document.getElementById('quizContainer').innerHTML = `
+    <div class="quiz-question">
+      <div class="quiz-q-num">سؤال ${quizIndex+1} — ${({ch1:'الفصل الأول',ch2:'الفصل الثاني',ch3:'الفصل الثالث',ch4:'الفصل الرابع',ch5:'الفصل الخامس'})[q.ch]||''}</div>
+      <div class="quiz-q-text">${q.q}</div>
+      <div class="quiz-options">
+        ${q.opts.map((opt,i)=>`<div class="quiz-option" id="opt${i}" onclick="selectAnswer(${i})"><div class="opt-letter">${letters[i]}</div>${opt}</div>`).join('')}
+      </div>
+      <div class="quiz-explanation" id="explanation"><strong>التوضيح:</strong> ${q.exp}</div>
+    </div>
+    <div class="quiz-nav">
+      <button class="fc-btn primary" id="nextBtn" style="display: none" onclick="nextQuizQuestion()">التالي ►</button>
+    </div>
+  `;
+  quizAnswered = false;
+}
+
+function selectAnswer(index) {
+  if(quizAnswered) return;
+  quizAnswered = true;
+  const q = quizCards[quizIndex];
+  const options = document.querySelectorAll('.quiz-option');
+
+  options.forEach((opt, i) => {
+    opt.classList.add('disabled');
+    if (i === q.correct) {
+      opt.classList.add('correct');
+    } else if (i === index) {
+      opt.classList.add('wrong');
+    }
+  });
+
+  if (index === q.correct) {
+    quizScore++;
+  }
+
+  document.getElementById('explanation').classList.add('show');
+  document.getElementById('nextBtn').style.display = 'block';
+}
+
+function nextQuizQuestion() {
+  quizIndex++;
+  renderQuizQuestion();
+}
+
+function showQuizResult() {
+  document.getElementById('quizContainer').innerHTML = '';
+  document.getElementById('quizProgress').style.width = '100%';
+  document.getElementById('quizCounter').textContent = 'النتيجة النهائية';
+
+  const resultEl = document.getElementById('quizResult');
+  const scoreEl = document.getElementById('quizScore');
+  const feedbackEl = document.getElementById('quizFeedback');
+
+  const pct = Math.round((quizScore / quizCards.length) * 100);
+  scoreEl.textContent = pct + '٪';
+
+  scoreEl.classList.remove('excellent', 'good', 'needs-work');
+  if(pct >= 85) {
+    scoreEl.classList.add('excellent');
+    feedbackEl.textContent = 'ممتاز! أداء رائع، إنت كده فاهم مفاهيم ريادة الأعمال كويس جداً.';
+  } else if(pct >= 60) {
+    scoreEl.classList.add('good');
+    feedbackEl.textContent = 'جيد جداً! أداؤك معقول، بس محتاج تراجع شوية على البطاقات التعليمية عشان تقفل الدرجة.';
+  } else {
+    scoreEl.classList.add('needs-work');
+    feedbackEl.textContent = 'محتاج تراجع الفصول تاني، ارجع اقرأ الملخصات وجرب تختبر نفسك مرة كمان.';
+  }
+
+  resultEl.classList.add('show');
+}
+</script>
+</body>
+</html>
